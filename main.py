@@ -8,6 +8,7 @@ root.title('Windows Server Setup')
 root.geometry('500x500')
 
 #-----<DHCP>-----
+    #-----<DHCP_Install>-----
 def DHCP_Install_Click():
     DHCP_install_thread = threading.Thread(target=installing_DHCP)
     DHCP_install_thread.start()
@@ -23,9 +24,39 @@ def Func_DHCP_complete():
     DHCP_Install.config(text="Finished")  
     time.sleep(3)
     DHCP_Install.config(text="Install DHCP Feature")  
+    
+    #-----</DHCP_Install>-----
+
+    #-----<DHCP_Setup>-----
+def DHCP_Setup_Click():
+    DHCP_Setup_Window = tk.Toplevel(root)
+    DHCP_Setup_Window.geometry("200x200")
+
+    StartRangelabel = tk.Label(DHCP_Setup_Window, text='StartRange:')
+    StartRangelabel.grid(row=0, column=0)
+    StartRangeentry = tk.Entry(DHCP_Setup_Window)
+    StartRangeentry.grid(row=0, column=1)
+    EndRangelabel = tk.Label(DHCP_Setup_Window, text='EndRange:')
+    EndRangelabel.grid(row=1, column=0)
+    EndRangeentry = tk.Entry(DHCP_Setup_Window)
+    EndRangeentry.grid(row=1, column=1)
+    SubnetMasklabel = tk.Label(DHCP_Setup_Window, text='SubnetMask:')
+    SubnetMasklabel.grid(row=2, column=0)
+    SubnetMaskentry = tk.Entry(DHCP_Setup_Window)
+    SubnetMaskentry.grid(row=2, column=1)
+    ScopeNamelabel = tk.Label(DHCP_Setup_Window, text='ScopeName:')
+    ScopeNamelabel.grid(row=3, column=0)
+    ScopeNameentry = tk.Entry(DHCP_Setup_Window)
+    ScopeNameentry.grid(row=3, column=1)
+    DNS_Addresslabel = tk.Label(DHCP_Setup_Window, text='DNS Address:')
+    DNS_Addresslabel.grid(row=4, column=0)
+    DNS_Addressentry = tk.Entry(DHCP_Setup_Window)
+    DNS_Addressentry.grid(row=4, column=1)
+    #-----</DHCP_Setup>-----
 
 DHCP_Install = tk.Button(root, text='Install DHCP Feature', command=DHCP_Install_Click)
 DHCP_Install.pack()
+Setup_DHCP=tk.Button(root,text="Setup DHCP",command=DHCP_Setup_Click)
+Setup_DHCP.pack()
 #----</DHCP>-----
-
 root.mainloop()
