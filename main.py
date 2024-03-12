@@ -31,7 +31,7 @@ def Func_DHCP_complete():
     #-----<DHCP_Setup>-----
 
 def DHCP_Setup_Click():
-        #-----<close>-----
+        #-----<Read、Setup and close>-----
     def read_DHCP_input():
         StartRange=StartRangeentry.get()
         EndRange=EndRangeentry.get()
@@ -39,17 +39,26 @@ def DHCP_Setup_Click():
         ScopeName=ScopeNameentry.get()
         DNS_Address=DNS_Addressentry.get()
         Router=Routerentry.get()
-        output="Add-DhcpServerV4Scope -Name "+ScopeName+" -StartRange "+StartRange+" -EndRange "+EndRange+" -Subnetmask "+SubnetMask
-        print(output)
-        tmp="powershell.exe "+output
+        AddScope="Add-DhcpServerV4Scope -Name "+ScopeName+" -StartRange "+StartRange+" -EndRange "+EndRange+" -Subnetmask "+SubnetMask
+        print(AddScope)
+        tmp="powershell.exe "+AddScope
+        os.system(tmp)
+        AddOption="Add-DhcpServerv4ExclusionRange -ScopeId "+ScopeName+" -OptionId 6 -Value "+DNS_Address
+        tmp="powershell.exe "+AddOption
         os.system(tmp)
         DHCP_Setup_Window.destroy()
         DHCP_Setup_Window.update()
-        #-----</close>-----
-    
+        #-----</Read、Setup and close>-----
+
+        #-----<Just close>-----
+    def DHCP_Setup_Exit():
+        DHCP_Setup_Window.destroy()
+        DHCP_Setup_Window.update()
+        #-----</Just close>-----
+
     DHCP_Setup_Window = tk.Toplevel(root)
     DHCP_Setup_Window.geometry("200x200")
-
+    #<Entrys>
     StartRangelabel = tk.Label(DHCP_Setup_Window, text='StartRange:')
     StartRangelabel.grid(row=0, column=0)
     StartRangeentry = tk.Entry(DHCP_Setup_Window)
@@ -70,13 +79,16 @@ def DHCP_Setup_Click():
     DNS_Addresslabel.grid(row=4, column=0)
     DNS_Addressentry = tk.Entry(DHCP_Setup_Window)
     DNS_Addressentry.grid(row=4, column=1)
-    Routerlabel = tk.Label(DHCP_Setup_Window, text='Router:')
+    Routerlabel = tk.Label(DHCP_Setup_Window, text='Router IP:')
     Routerlabel.grid(row=5, column=0)
     Routerentry = tk.Entry(DHCP_Setup_Window)
     Routerentry.grid(row=5, column=1)
+    #</Entrys>
 
+    Exit=tk.Button(DHCP_Setup_Window,text="Exit",command=DHCP_Setup_Exit)
+    Exit.grid(row=6,column=0)
     read_input=tk.Button(DHCP_Setup_Window,text="Finish",command=read_DHCP_input)
-    read_input.grid(row=6,column=0)
+    read_input.grid(row=6,column=1)   
 
     #-----</DHCP_Setup>-----
 DHCP_Install = tk.Button(root, text='Install DHCP Feature', command=DHCP_Install_Click)
@@ -84,4 +96,5 @@ DHCP_Install.pack()
 Setup_DHCP=tk.Button(root,text="Setup DHCP",command=DHCP_Setup_Click)
 Setup_DHCP.pack()
 #----</DHCP>-----
+
 root.mainloop()
