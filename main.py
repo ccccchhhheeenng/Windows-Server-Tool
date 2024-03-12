@@ -13,7 +13,7 @@ root.geometry('500x500')
 def DHCP_Install_Click():
     DHCP_install_thread = threading.Thread(target=installing_DHCP)
     DHCP_install_thread.start()
-    DHCP_Install.config(text='installing')
+    DHCP_Install.config(text='Installing')
 
 def installing_DHCP():
     os.system("powershell.exe Install-WindowsFeature -Name 'DHCP' –IncludeManagementTools")
