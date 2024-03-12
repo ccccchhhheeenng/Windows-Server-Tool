@@ -5,20 +5,27 @@ root = tk.Tk()
 import os
 root.title('my window')
 root.geometry('200x150')
+#-----<DHCP>-----
+def DHCP_Install_Click():
+    DHCP_install_thread = threading.Thread(target=installing_DHCP)
+    DHCP_install_thread.start()
+    DHCP_Install.config(text='installing')
 
-def button_event():
-    os.system("powershell.exe Get-Process")  
-    mybutton.config(text='complete') 
-    after_thread.start()
+def installing_DHCP():
+    os.system("powershell.exe Install-WindowsFeature -Name 'DHCP' –IncludeManagementTools")
+    DHCP_complete_thread = threading.Thread(target=Func_DHCP_complete)
+    DHCP_complete_thread.start()
 
-def run_after_completion():
+
+def Func_DHCP_complete():
     time.sleep(3)  
-    mybutton.config(text="run cmd")  
+    DHCP_Install.config(text="Finished")  
+    time.sleep(3)
+    DHCP_Install.config(text="Install DHCP Feature")  
 
-mybutton = tk.Button(root, text='run cmd', command=button_event)
-mybutton.pack()
+DHCP_Install = tk.Button(root, text='Install DHCP Feature', command=DHCP_Install_Click)
+DHCP_Install.pack()
 
-
-after_thread = threading.Thread(target=run_after_completion)
+#----</DHCP>-----
 
 root.mainloop()

@@ -1,24 +1,31 @@
 import tkinter as tk
 import time
 import threading
-root = tk.Tk()
 import os
-root.title('my window')
-root.geometry('200x150')
 
-def button_event():
-    os.system("start cmd")  
-    mybutton.config(text='complete') 
-    after_thread.start()
+root = tk.Tk()
+root.title('Windows Server Setup')
+root.geometry('500x500')
 
-def run_after_completion():
-    time.sleep(3)  
-    mybutton.config(text="run cmd")  
+#-----<DHCP>-----
+def DHCP_Install_Click():
+    DHCP_install_thread = threading.Thread(target=installing_DHCP)
+    DHCP_install_thread.start()
+    DHCP_Install.config(text='installing')
 
-mybutton = tk.Button(root, text='run cmd', command=button_event)
-mybutton.pack()
+def installing_DHCP():
+    os.system("powershell.exe Install-WindowsFeature -Name 'DHCP' –IncludeManagementTools")
+    DHCP_complete_thread = threading.Thread(target=Func_DHCP_complete)
+    DHCP_complete_thread.start()
 
 
-after_thread = threading.Thread(target=run_after_completion)
+def Func_DHCP_complete():
+    DHCP_Install.config(text="Finished")  
+    time.sleep(3)
+    DHCP_Install.config(text="Install DHCP Feature")  
+
+DHCP_Install = tk.Button(root, text='Install DHCP Feature', command=DHCP_Install_Click)
+DHCP_Install.pack()
+#----</DHCP>-----
 
 root.mainloop()
