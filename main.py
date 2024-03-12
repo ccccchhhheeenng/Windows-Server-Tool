@@ -8,6 +8,7 @@ root.title('Windows Server Setup')
 root.geometry('500x500')
 
 #-----<DHCP>-----
+
     #-----<DHCP_Install>-----
 def DHCP_Install_Click():
     DHCP_install_thread = threading.Thread(target=installing_DHCP)
@@ -28,7 +29,24 @@ def Func_DHCP_complete():
     #-----</DHCP_Install>-----
 
     #-----<DHCP_Setup>-----
+
 def DHCP_Setup_Click():
+        #-----<close>-----
+    def read_DHCP_input():
+        StartRange=StartRangeentry.get()
+        EndRange=EndRangeentry.get()
+        SubnetMask=SubnetMaskentry.get()
+        ScopeName=ScopeNameentry.get()
+        DNS_Address=DNS_Addressentry.get()
+        Router=Routerentry.get()
+        output="Add-DhcpServerV4Scope -Name "+ScopeName+" -StartRange "+StartRange+" -EndRange "+EndRange+" -Subnetmask "+SubnetMask
+        print(output)
+        tmp="powershell.exe "+output
+        os.system(tmp)
+        DHCP_Setup_Window.destroy()
+        DHCP_Setup_Window.update()
+        #-----</close>-----
+    
     DHCP_Setup_Window = tk.Toplevel(root)
     DHCP_Setup_Window.geometry("200x200")
 
@@ -52,8 +70,15 @@ def DHCP_Setup_Click():
     DNS_Addresslabel.grid(row=4, column=0)
     DNS_Addressentry = tk.Entry(DHCP_Setup_Window)
     DNS_Addressentry.grid(row=4, column=1)
-    #-----</DHCP_Setup>-----
+    Routerlabel = tk.Label(DHCP_Setup_Window, text='Router:')
+    Routerlabel.grid(row=5, column=0)
+    Routerentry = tk.Entry(DHCP_Setup_Window)
+    Routerentry.grid(row=5, column=1)
 
+    read_input=tk.Button(DHCP_Setup_Window,text="Finish",command=read_DHCP_input)
+    read_input.grid(row=6,column=0)
+
+    #-----</DHCP_Setup>-----
 DHCP_Install = tk.Button(root, text='Install DHCP Feature', command=DHCP_Install_Click)
 DHCP_Install.pack()
 Setup_DHCP=tk.Button(root,text="Setup DHCP",command=DHCP_Setup_Click)
