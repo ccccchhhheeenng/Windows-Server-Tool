@@ -106,11 +106,33 @@ def DHCP_Setup_Click():
     read_input=tk.Button(DHCP_Setup_Window,text="Finish",command=DHCP_Finish_Button)
     read_input.grid(row=6,column=1)   
     #-----</DHCP_Setup>-----
+#----</DHCP>-----
+#----<DNS>-----
+    #-----<DNS_Install>
+def DNS_Install_Click():
+    DNS_install_thread = threading.Thread(target=installing_DNS)
+    DNS_install_thread.start()
+    DNS_Install.config(text='Installing')
 
+def installing_DNS():
+    os.system("powershell.exe Install-WindowsFeature -Name 'DNS' –IncludeManagementTools")
+    DNS_complete_thread = threading.Thread(target=Func_DNS_complete)
+    DNS_complete_thread.start()
+
+
+def Func_DNS_complete():
+    DNS_Install.config(text="Finished")  
+    time.sleep(3)
+    DNS_Install.config(text="Install DNS Feature")  
+    
+    #-----</DNS_Install>-----
+
+#----</DNS>-----
 DHCP_Install = tk.Button(root, text='Install DHCP Feature', command=DHCP_Install_Click)
 DHCP_Install.pack()
 Setup_DHCP=tk.Button(root,text="Setup DHCP",command=DHCP_Setup_Click)
 Setup_DHCP.pack()
-#----</DHCP>-----
+DNS_Install=tk.Button(root,text="Install DNS Feature",command=DNS_Install_Click)
+DNS_Install.pack()
 
 root.mainloop()
