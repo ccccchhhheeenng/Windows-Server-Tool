@@ -129,12 +129,59 @@ def Func_DNS_complete():
     
     #-----</DNS_Install>-----
 
+    #-----<DNS_Main_Window>-----
+def DNS_Setup_click():
+    
+        #-----<Foward lookup zone>-----
+    def Foward_Lookup_Zone_Click():
+        def Add_Primary_Button_Click():
+            Add_Primary_Button_Window=tk.Toplevel(Foward_Lookup_Zone_Window)
+            Add_Primary_Button_Window.geometry("200x200")
+        
+        Foward_Lookup_Zone_Window=tk.Toplevel(DNS_Setup_Window)
+        Foward_Lookup_Zone_Window.geometry("200x200")
+        Add_Primary_Zone_Button=tk.Button(Foward_Lookup_Zone_Window,text="Add Primary Zone",command=Add_Primary_Button_Click)
+        Add_Primary_Zone_Button.pack()
+        #-----</Foward lookup zone>-----
+    def Reverse_Lookup_Zone_Click():
+        Reverse_Lookup_Zone_Window=tk.Toplevel(DNS_Setup_Window)
+        Reverse_Lookup_Zone_Window.geometry("200x200")
+
+    def Set_Fowarder_Click():
+        def input_click():
+            Address=AddressEntry.get()
+            command="Set-DnsServerForwarder -IPAddress "+Address
+            tmp="powershell.exe "+command
+            os.system(tmp)
+            Set_Fowarder_Window.destroy()
+        Set_Fowarder_Window=tk.Toplevel(DNS_Setup_Window)
+        Set_Fowarder_Window.geometry("200x200")
+        Addresslabel=tk.Label(Set_Fowarder_Window,text="IPAddress")
+        Addresslabel.grid(row=0,column=0)
+        AddressEntry=tk.Entry(Set_Fowarder_Window)
+        AddressEntry.grid(row=0,column=1)
+        Fowarder_input=tk.Button(Set_Fowarder_Window,text="Finish",command=input_click)
+        Fowarder_input.grid(row=1,column=1)
+    DNS_Setup_Window = tk.Toplevel(root)
+    DNS_Setup_Window.geometry("200x200")
+    Foward_Lookup_Zone=tk.Button(DNS_Setup_Window,text="Foward Look Zone Settings",command=Foward_Lookup_Zone_Click)
+    Foward_Lookup_Zone.pack()
+    Reverse_Lookup_Zone=tk.Button(DNS_Setup_Window,text="Reverse Look Zone Settings",command=Reverse_Lookup_Zone_Click)
+    Reverse_Lookup_Zone.pack()
+    Set_Fowarder=tk.Button(DNS_Setup_Window,text="Set Fowarder",command=Set_Fowarder_Click)
+    Set_Fowarder.pack()
+        
+        
 #----</DNS>-----
+
+#----<main>-----
 DHCP_Install = tk.Button(root, text='Install DHCP Feature', command=DHCP_Install_Click)
 DHCP_Install.pack()
 Setup_DHCP=tk.Button(root,text="Setup DHCP",command=DHCP_Setup_Click)
 Setup_DHCP.pack()
 DNS_Install=tk.Button(root,text="Install DNS Feature",command=DNS_Install_Click)
 DNS_Install.pack()
-
+Setup_DNS=tk.Button(root,text="Setup DNS",command=DNS_Setup_click)
+Setup_DNS.pack()
+#----</main>-----
 root.mainloop()
