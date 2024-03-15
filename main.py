@@ -107,8 +107,10 @@ def DHCP_Setup_Click():
     read_input.grid(row=6,column=1)   
     #-----</DHCP_Setup>-----
 #----</DHCP>-----
+    
 #----<DNS>-----
     #-----<DNS_Install>
+
 def DNS_Install_Click():
     DNS_install_thread = threading.Thread(target=installing_DNS)
     DNS_install_thread.start()
