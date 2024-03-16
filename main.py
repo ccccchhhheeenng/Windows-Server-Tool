@@ -157,6 +157,10 @@ def DNS_Setup_click():
                 tmp=Set_Record_Type.get()
                 if tmp=="A":
                     def A_input_Click():
+                        DNS_install_thread = threading.Thread(target=installing_DNS_A)
+                        DNS_install_thread.start()
+                        A_input.config(text="Please Wait")
+                    def installing_DNS_A():
                         zone=Set_Zone_Entry.get()
                         name=Name_Entry.get()
                         IPv4Address=IPv4Address_Entry.get()
@@ -177,6 +181,10 @@ def DNS_Setup_click():
                     A_input.grid(row=2,column=1)
                 elif tmp=="AAAA":
                     def AAAA_input_Click():
+                        DNS_install_thread = threading.Thread(target=installing_DNS_AAAA)
+                        DNS_install_thread.start()
+                        AAAA_input.config(text="Please Wait")
+                    def installing_DNS_AAAA():
                         zone=Set_Zone_Entry.get()
                         name=Name_Entry.get()
                         IPv6Address=IPv6Address_Entry.get()
@@ -196,8 +204,29 @@ def DNS_Setup_click():
                     AAAA_input=tk.Button(Add_AAAA_Record_Window,text="Finish",command=AAAA_input_Click)
                     AAAA_input.grid(row=2,column=1)
                 else:
+                    def CName_input_Click():
+                        DNS_install_thread = threading.Thread(target=installing_DNS_CName)
+                        DNS_install_thread.start()
+                        CName_input.config(text="Please Wait")
+                    def installing_DNS_CName():
+                        zone=Set_Zone_Entry.get()
+                        name=Name_Entry.get()
+                        HostNameAlias=HostNameAlias_Entry.get()
+                        command="Add-DnsServerResourceRecordCName -Name "+name+" -ZoneName "+zone+" -HostNameAlias "+HostNameAlias
+                        powershell(command)
+                        Add_CName_Record_Window.destroy()
                     Add_CName_Record_Window=tk.Toplevel(Add_DNS_Record_Window)
                     Add_CName_Record_Window.geometry("200x200")
+                    Name_Label=tk.Label(Add_CName_Record_Window,text="Name:")
+                    Name_Label.grid(row=0,column=0)
+                    Name_Entry=tk.Entry(Add_CName_Record_Window)
+                    Name_Entry.grid(row=0,column=1)
+                    HostNameAlias_Label=tk.Label(Add_CName_Record_Window,text="HostNameAlias:")
+                    HostNameAlias_Label.grid(row=1,column=0)
+                    HostNameAlias_Entry=tk.Entry(Add_CName_Record_Window)
+                    HostNameAlias_Entry.grid(row=1,column=1)
+                    CName_input=tk.Button(Add_CName_Record_Window,text="Finish",command=CName_input_Click)
+                    CName_input.grid(row=2,column=1)
 
             Add_DNS_Record_Window=tk.Toplevel(Foward_Lookup_Zone_Window)
             Add_DNS_Record_Window.geometry("200x200")
