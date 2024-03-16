@@ -175,7 +175,7 @@ def DNS_Setup_click():
         AddressEntry.grid(row=0,column=1)
         Fowarder_input=tk.Button(Set_Fowarder_Window,text="Finish",command=input_click)
         Fowarder_input.grid(row=1,column=1)
-        
+
     DNS_Setup_Window = tk.Toplevel(root)
     DNS_Setup_Window.geometry("200x200")
     Foward_Lookup_Zone=tk.Button(DNS_Setup_Window,text="Foward Look Zone Settings",command=Foward_Lookup_Zone_Click)
