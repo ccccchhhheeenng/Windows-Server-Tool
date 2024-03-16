@@ -8,7 +8,7 @@ root.title('Windows Server Setup')
 root.geometry('500x500')
 
 def powershell(command):
-    subprocess.run("powershell.exe",command)
+    subprocess.run(["powershell.exe", command])
 
 #-----<DHCP>-----
 
@@ -19,7 +19,7 @@ def DHCP_Install_Click():
     DHCP_Install.config(text='Installing')
 
 def installing_DHCP():
-    powershell("powershell.exe Install-WindowsFeature -Name 'DHCP' –IncludeManagementTools")
+    powershell("Install-WindowsFeature -Name 'DHCP' –IncludeManagementTools")
     DHCP_complete_thread = threading.Thread(target=Func_DHCP_complete)
     DHCP_complete_thread.start()
 
@@ -56,14 +56,11 @@ def DHCP_Setup_Click():
         ScopeID+="0"
         #</Scope id calculate>
         AddScope="Add-DhcpServerV4Scope -Name "+ScopeName+" -StartRange "+StartRange+" -EndRange "+EndRange+" -Subnetmask "+SubnetMask
-        tmp="powershell.exe "+AddScope
-        powershell(tmp)
+        powershell(AddScope)
         SetDHCPDNS="Set-DhcpServerv4OptionValue -ScopeId "+ScopeID+" -OptionId 6 -Value "+DNS_Address
-        tmp="powershell.exe "+SetDHCPDNS
-        powershell(tmp)
+        powershell(SetDHCPDNS)
         SetDHCPRouter="Set-DhcpServerv4OptionValue -ScopeId "+ScopeID+" -Router "+Router
-        tmp="powershell.exe "+SetDHCPRouter
-        powershell(tmp)
+        powershell(SetDHCPRouter)
         DHCP_Setup_Window.destroy()
         DHCP_Setup_Window.update()
         #-----</Read、Setup and close>-----
@@ -142,8 +139,7 @@ def DNS_Setup_click():
                 ZoneName=ZoneNameEntry.get()
                 ZoneFile=ZoneName+".dns"
                 command="Add-DnsServerPrimaryZone -Name "+ZoneName+" -ZoneFile "+ZoneFile
-                tmp="powershell.exe "+command
-                powershell(tmp)
+                powershell(command)
             Add_Primary_Button_Window=tk.Toplevel(Foward_Lookup_Zone_Window)
             Add_Primary_Button_Window.geometry("200x200")
             ZoneNamelabel=tk.Label(Add_Primary_Button_Window,text="Zone Name")
@@ -167,8 +163,7 @@ def DNS_Setup_click():
         def input_click():
             Address=AddressEntry.get()
             command="Set-DnsServerForwarder -IPAddress "+Address
-            tmp="powershell.exe "+command
-            powershell(tmp)
+            powershell(command)
             Set_Fowarder_Window.destroy()
         Set_Fowarder_Window=tk.Toplevel(DNS_Setup_Window)
         Set_Fowarder_Window.geometry("200x200")
