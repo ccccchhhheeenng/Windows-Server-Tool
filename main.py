@@ -1,11 +1,14 @@
 import tkinter as tk
 import time
 import threading
-import os
+import subprocess
 
 root = tk.Tk()
 root.title('Windows Server Setup')
 root.geometry('500x500')
+
+def powershell(command):
+    subprocess.run("powershell.exe",command)
 
 #-----<DHCP>-----
 
@@ -16,7 +19,7 @@ def DHCP_Install_Click():
     DHCP_Install.config(text='Installing')
 
 def installing_DHCP():
-    os.system("powershell.exe Install-WindowsFeature -Name 'DHCP' –IncludeManagementTools")
+    powershell("powershell.exe Install-WindowsFeature -Name 'DHCP' –IncludeManagementTools")
     DHCP_complete_thread = threading.Thread(target=Func_DHCP_complete)
     DHCP_complete_thread.start()
 
@@ -54,13 +57,13 @@ def DHCP_Setup_Click():
         #</Scope id calculate>
         AddScope="Add-DhcpServerV4Scope -Name "+ScopeName+" -StartRange "+StartRange+" -EndRange "+EndRange+" -Subnetmask "+SubnetMask
         tmp="powershell.exe "+AddScope
-        os.system(tmp)
+        powershell(tmp)
         SetDHCPDNS="Set-DhcpServerv4OptionValue -ScopeId "+ScopeID+" -OptionId 6 -Value "+DNS_Address
         tmp="powershell.exe "+SetDHCPDNS
-        os.system(tmp)
+        powershell(tmp)
         SetDHCPRouter="Set-DhcpServerv4OptionValue -ScopeId "+ScopeID+" -Router "+Router
         tmp="powershell.exe "+SetDHCPRouter
-        os.system(tmp)
+        powershell(tmp)
         DHCP_Setup_Window.destroy()
         DHCP_Setup_Window.update()
         #-----</Read、Setup and close>-----
@@ -117,7 +120,7 @@ def DNS_Install_Click():
     DNS_Install.config(text='Installing')
 
 def installing_DNS():
-    os.system("powershell.exe Install-WindowsFeature -Name 'DNS' –IncludeManagementTools")
+    powershell("powershell.exe Install-WindowsFeature -Name 'DNS' –IncludeManagementTools")
     DNS_complete_thread = threading.Thread(target=Func_DNS_complete)
     DNS_complete_thread.start()
 
@@ -140,7 +143,7 @@ def DNS_Setup_click():
                 ZoneFile=ZoneName+".dns"
                 command="Add-DnsServerPrimaryZone -Name "+ZoneName+" -ZoneFile "+ZoneFile
                 tmp="powershell.exe "+command
-                os.system(tmp)
+                powershell(tmp)
             Add_Primary_Button_Window=tk.Toplevel(Foward_Lookup_Zone_Window)
             Add_Primary_Button_Window.geometry("200x200")
             ZoneNamelabel=tk.Label(Add_Primary_Button_Window,text="Zone Name")
@@ -165,7 +168,7 @@ def DNS_Setup_click():
             Address=AddressEntry.get()
             command="Set-DnsServerForwarder -IPAddress "+Address
             tmp="powershell.exe "+command
-            os.system(tmp)
+            powershell(tmp)
             Set_Fowarder_Window.destroy()
         Set_Fowarder_Window=tk.Toplevel(DNS_Setup_Window)
         Set_Fowarder_Window.geometry("200x200")
