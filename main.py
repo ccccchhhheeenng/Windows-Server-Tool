@@ -147,6 +147,7 @@ def DNS_Setup_click():
                 command="Add-DnsServerPrimaryZone -Name "+ZoneName+" -ZoneFile "+ZoneFile
                 powershell(command)
                 #-----</Add>-----
+                
             Add_Primary_Button_Window=tk.Toplevel(Foward_Lookup_Zone_Window)
             Add_Primary_Button_Window.geometry("200x200")
             ZoneNamelabel=tk.Label(Add_Primary_Button_Window,text="Zone Name")
@@ -155,8 +156,11 @@ def DNS_Setup_click():
             ZoneNameEntry.grid(row=0,column=1)
             Add_Primart_Zone_input=tk.Button(Add_Primary_Button_Window,text="Finish",command=Add_Primary_Zone_Click)
             Add_Primart_Zone_input.grid(row=1,column=1)
+            #-----</Primary Zone Setting>-----
 
+            #----<DNS Record>----
         def Add_DNS_Record_Click():
+                #----<ADD DNS Record>----
             def DNS_Record_input_Click():
                 tmp=Set_Record_Type.get()
                 if tmp=="A":
@@ -243,29 +247,32 @@ def DNS_Setup_click():
             Set_Record_Type.grid(row=1,column=0)
             DNS_Record_input=tk.Button(Add_DNS_Record_Window,text="Finish",command=DNS_Record_input_Click)
             DNS_Record_input.grid(row=2,column=0)
-            #-----</Primary Zone Setting>----
+                #----</ADD DNS Record>----
         Foward_Lookup_Zone_Window=tk.Toplevel(DNS_Setup_Window)
         Foward_Lookup_Zone_Window.geometry("200x200")
         Add_Primary_Zone_Button=tk.Button(Foward_Lookup_Zone_Window,text="Add Primary Zone",command=Add_Primary_Button_Click)
         Add_Primary_Zone_Button.pack()
         Add_DNS_Record_Button=tk.Button(Foward_Lookup_Zone_Window,text="Add DNS Record",command=Add_DNS_Record_Click)
         Add_DNS_Record_Button.pack()
+            #----<DNS Record>----
+        
         #-----</Foward lookup zone>-----
     def Reverse_Lookup_Zone_Click():
         Reverse_Lookup_Zone_Window=tk.Toplevel(DNS_Setup_Window)
         Reverse_Lookup_Zone_Window.geometry("200x200")
-
+        #----<DNS Fowarder>----
     def Set_Fowarder_Click():
-
+            #----<Set DNS Fowarder>----
         def input_click():
             DNS_install_thread = threading.Thread(target=Setting_Fowarder)
             DNS_install_thread.start()
-            Fowarder_input.config(text="Please Wait")
+            Fowarder_input.config(text="Please")
         def Setting_Fowarder():
             Address=AddressEntry.get()
             command="Set-DnsServerForwarder -IPAddress "+Address
             powershell(command)
             Set_Fowarder_Window.destroy()
+            #----</Set DNS Fowarder>----
         Set_Fowarder_Window=tk.Toplevel(DNS_Setup_Window)
         Set_Fowarder_Window.geometry("200x200")
         Addresslabel=tk.Label(Set_Fowarder_Window,text="IPAddress")
@@ -274,6 +281,7 @@ def DNS_Setup_click():
         AddressEntry.grid(row=0,column=1)
         Fowarder_input=tk.Button(Set_Fowarder_Window,text="Finish",command=input_click)
         Fowarder_input.grid(row=1,column=1)
+        #----</DNS Fowarder>----
 
     DNS_Setup_Window = tk.Toplevel(root)
     DNS_Setup_Window.geometry("200x200")
