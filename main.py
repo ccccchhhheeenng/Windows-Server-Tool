@@ -131,7 +131,7 @@ def Func_DNS_complete():
 
     #-----<DNS_Main_Window>-----
 def DNS_Setup_click():
-    
+
         #-----<Foward lookup zone>-----
     def Foward_Lookup_Zone_Click():
             #-----<Primary Zone Setting>-----
@@ -146,6 +146,7 @@ def DNS_Setup_click():
                 ZoneFile=ZoneName+".dns"
                 command="Add-DnsServerPrimaryZone -Name "+ZoneName+" -ZoneFile "+ZoneFile
                 powershell(command)
+                Add_Primary_Button_Window.destroy()
                 #-----</Add>-----
                 
             Add_Primary_Button_Window=tk.Toplevel(Foward_Lookup_Zone_Window)
@@ -238,7 +239,7 @@ def DNS_Setup_click():
 
             Add_DNS_Record_Window=tk.Toplevel(Foward_Lookup_Zone_Window)
             Add_DNS_Record_Window.geometry("200x200")
-            Set_Zone_Label=tk.Label(Add_DNS_Record_Window,text="Set Zone")
+            Set_Zone_Label=tk.Label(Add_DNS_Record_Window,text="Set Zone:")
             Set_Zone_Label.grid(row=0,column=0)
             Set_Zone_Entry=tk.Entry(Add_DNS_Record_Window)
             Set_Zone_Entry.grid(row=0,column=1)
@@ -266,7 +267,7 @@ def DNS_Setup_click():
         def input_click():
             DNS_install_thread = threading.Thread(target=Setting_Fowarder)
             DNS_install_thread.start()
-            Fowarder_input.config(text="Please")
+            Fowarder_input.config(text="Please Wait")
         def Setting_Fowarder():
             Address=AddressEntry.get()
             command="Set-DnsServerForwarder -IPAddress "+Address
