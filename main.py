@@ -138,6 +138,10 @@ def DNS_Setup_click():
         def Add_Primary_Button_Click():
                 #-----<Add>-----
             def Add_Primary_Zone_Click():
+                DNS_install_thread = threading.Thread(target=Adding_Zone)
+                DNS_install_thread.start()
+                Add_Primart_Zone_input.config(text="Please Wait")
+            def Adding_Zone():
                 ZoneName=ZoneNameEntry.get()
                 ZoneFile=ZoneName+".dns"
                 command="Add-DnsServerPrimaryZone -Name "+ZoneName+" -ZoneFile "+ZoneFile
@@ -254,6 +258,10 @@ def DNS_Setup_click():
     def Set_Fowarder_Click():
 
         def input_click():
+            DNS_install_thread = threading.Thread(target=Setting_Fowarder)
+            DNS_install_thread.start()
+            Fowarder_input.config(text="Please Wait")
+        def Setting_Fowarder():
             Address=AddressEntry.get()
             command="Set-DnsServerForwarder -IPAddress "+Address
             powershell(command)
