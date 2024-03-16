@@ -2,7 +2,7 @@ import tkinter as tk
 import time
 import threading
 import subprocess
-
+from tkinter import ttk
 root = tk.Tk()
 root.title('Windows Server Setup')
 root.geometry('500x500')
@@ -151,9 +151,31 @@ def DNS_Setup_click():
             ZoneNameEntry.grid(row=0,column=1)
             Add_Primart_Zone_input=tk.Button(Add_Primary_Button_Window,text="Finish",command=Add_Primary_Zone_Click)
             Add_Primart_Zone_input.grid(row=1,column=1)
+
         def Add_DNS_Record_Click():
+            def DNS_Record_input_Click():
+                tmp=Set_Record_Type.get()
+                if tmp=="A":
+                    Add_A_Record=tk.Toplevel(Add_DNS_Record_Window)
+                    Add_A_Record.geometry("200x200")
+                elif tmp=="AAAA":
+                    Add_AAAA_Record=tk.Toplevel(Add_DNS_Record_Window)
+                    Add_AAAA_Record.geometry("200x200")
+                else:
+                    Add_CName_Record=tk.Toplevel(Add_DNS_Record_Window)
+                    Add_CName_Record.geometry("200x200")
+
             Add_DNS_Record_Window=tk.Toplevel(Foward_Lookup_Zone_Window)
             Add_DNS_Record_Window.geometry("200x200")
+            Set_Zone_Label=tk.Label(Add_DNS_Record_Window,text="Set Zone")
+            Set_Zone_Label.grid(row=0,column=0)
+            Set_Zoen_Entry=tk.Entry(Add_DNS_Record_Window)
+            Set_Zoen_Entry.grid(row=0,column=1)
+            #---<!!!!!!!需合併column!!!!!>---
+            Set_Record_Type=ttk.Combobox(Add_DNS_Record_Window,values=["A","AAAA","CName"])
+            Set_Record_Type.grid(row=1,column=0)
+            DNS_Record_input=tk.Button(Add_DNS_Record_Window,text="Finish",command=DNS_Record_input_Click)
+            DNS_Record_input.grid(row=2,column=0)
             #-----</Primary Zone Setting>----
         Foward_Lookup_Zone_Window=tk.Toplevel(DNS_Setup_Window)
         Foward_Lookup_Zone_Window.geometry("200x200")
