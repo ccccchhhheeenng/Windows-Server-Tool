@@ -91,7 +91,7 @@ def DHCP_Setup_Click():
         #-----</Just close>-----
 
     DHCP_Setup_Window = tk.Toplevel(root)
-    DHCP_Setup_Window.geometry("200x200")
+    DHCP_Setup_Window.geometry("500x500")
 
     #<Entrys>
     StartRangelabel = tk.Label(DHCP_Setup_Window, text='StartRange:')

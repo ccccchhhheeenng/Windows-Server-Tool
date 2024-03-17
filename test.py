@@ -1,31 +1,14 @@
-import os
 import tkinter as tk
-import time
-import threading
-import subprocess
-root = tk.Tk()
-root.title('Windows Server Setup')
-root.geometry('500x500')
-def powershell(command):
-    subprocess.run(["powershell.exe", command])
 
-def DHCP_Install_Click():
-    DHCP_install_thread = threading.Thread(target=installing_DHCP)
-    DHCP_install_thread.start()
-    DHCP_Install.config(text='Installing')
+win = tk.Tk()
+win.geometry("700x350")  # Set the size of the Tkinter window
 
-def installing_DHCP():
-    code="powershell.exe Install-WindowsFeature -Name 'DHCP' –IncludeManagementTools"
-    powershell(code)
-    DHCP_complete_thread = threading.Thread(target=Func_DHCP_complete)
-    DHCP_complete_thread.start()
+# Add a frame to set the size of the window
+my_frame = tk.Frame(win, relief="sunken")
+my_frame.grid(sticky="s")  # Make the frame sticky for both west and east
 
+# Create and add your widget (e.g., a button) to my_frame
+my_button = tk.Button(my_frame, text="Click Me")
+my_button.grid()  # By default, it will be centered within the frame
 
-def Func_DHCP_complete():
-    DHCP_Install.config(text="Finished")  
-    time.sleep(3)
-    DHCP_Install.config(text="Install DHCP Feature")
-  
-DHCP_Install = tk.Button(root, text='Install DHCP Feature', command=DHCP_Install_Click)
-DHCP_Install.pack()
-root.mainloop()
+win.mainloop()
