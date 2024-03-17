@@ -317,12 +317,55 @@ def DNS_Setup_click():
             DNS_Record_input=tk.Button(Add_DNS_Record_Window,text="Finish",command=DNS_Record_input_Click)
             DNS_Record_input.grid(row=2,column=0)
                 #----</ADD DNS Record>----
+        def Remove_DNS_Zone_Click():
+            def DNS_Finish_Button():
+                Zone=ZoneNameentry.get()
+                command="Remove-DnsServerZone -Name "+Zone
+                powershell(command)
+            def DNS_Setup_Exit():
+                Remove_DNS_Zone_Window.destroy()
+            Remove_DNS_Zone_Window=tk.Toplevel(Foward_Lookup_Zone_Window)
+            Remove_DNS_Zone_Window.geometry("200x200")
+            ZoneNamelabel = tk.Label(Remove_DNS_Zone_Window, text='ZoneName:')
+            ZoneNamelabel.grid(row=0, column=0)
+            ZoneNameentry = tk.Entry(Remove_DNS_Zone_Window)
+            ZoneNameentry.grid(row=0, column=1)
+            Exit=ttk.Button(Remove_DNS_Zone_Window, text="Exit", command=DNS_Setup_Exit, style='Red.TButton')
+            Exit.grid(row=6,column=0,padx=20)
+            read_input=ttk.Button(Remove_DNS_Zone_Window, text="Finish", command=DNS_Finish_Button, style='Green.TButton')
+            read_input.grid(row=6,column=1)            
+        def Remove_DNS_Record_Click():
+            def DNS_Finish_Button():
+                Zone=ZoneNameentry.get()
+                Record=RecordNameentry.get()
+                command="Remove-DnsServerResourceRecord -ZoneName "+Zone+" -Name "+Record
+                powershell(command)
+            def DNS_Setup_Exit():
+                Remove_DNS_Record_Window.destroy()
+            Remove_DNS_Record_Window=tk.Toplevel(Foward_Lookup_Zone_Window)
+            Remove_DNS_Record_Window.geometry("200x200")
+            ZoneNamelabel = tk.Label(Remove_DNS_Record_Window, text='ScopeID:')
+            ZoneNamelabel.grid(row=0, column=0)
+            ZoneNameentry = tk.Entry(Remove_DNS_Record_Window)
+            ZoneNameentry.grid(row=0, column=1)
+            RecordNamelabel = tk.Label(Remove_DNS_Record_Window, text='RecordName:')
+            RecordNamelabel.grid(row=1, column=0)
+            RecordNameentry = tk.Entry(Remove_DNS_Record_Window)
+            RecordNameentry.grid(row=1, column=1)
+            Exit=ttk.Button(Remove_DNS_Record_Window, text="Exit", command=DNS_Setup_Exit, style='Red.TButton')
+            Exit.grid(row=6,column=0,padx=20)
+            read_input=ttk.Button(Remove_DNS_Record_Window, text="Finish", command=DNS_Finish_Button, style='Green.TButton')
+            read_input.grid(row=6,column=1)            
         Foward_Lookup_Zone_Window=tk.Toplevel(DNS_Setup_Window)
         Foward_Lookup_Zone_Window.geometry("200x200")
         Add_Primary_Zone_Button=tk.Button(Foward_Lookup_Zone_Window,text="Add Primary Zone",command=Add_Primary_Button_Click)
         Add_Primary_Zone_Button.pack()
         Add_DNS_Record_Button=tk.Button(Foward_Lookup_Zone_Window,text="Add DNS Record",command=Add_DNS_Record_Click)
         Add_DNS_Record_Button.pack()
+        Remove_DNS_Zone_Button=tk.Button(Foward_Lookup_Zone_Window,text="Remove DNS Zone",command=Remove_DNS_Zone_Click)
+        Remove_DNS_Zone_Button.pack()
+        Remove_DNS_Record_Button=tk.Button(Foward_Lookup_Zone_Window,text="Remove DNS Recoed",command=Remove_DNS_Record_Click)
+        Remove_DNS_Record_Button.pack()       
             #----<DNS Record>----
         
         #-----</Foward lookup zone>-----
