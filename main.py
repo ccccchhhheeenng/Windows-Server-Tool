@@ -1,37 +1,25 @@
-#power by ccccchhhheeenng
-#2024/03
-#                                      @+      +@       :#.      +@
-#                                      @+      +@       :#.      +@
-#                                      @+      +@       :#.      +@
-#    -+.    -+=    .+-     +=.   .=+.  @+ ==   +@  +-   :#.:+.   +@  +:     :+.     :+-      +-       ==       +-     :+.
-#  :#%@%  -#@@@+  *%@@=  ##@@=  *%@@%  @@#@@#  +@=#@%-  :#=%@%#  +@##@%-   #%@%#   =%@@+   ##@%#:  ###@@#  =#:#@%+   #%@%+#+
-#  @*.   :@@- .= +@.    #@*    :@#  :  @#: @@: +@@  +@: :@+  @@  +@@ :@@: %%: +@. =@- .@+ *@= :%=  @%: @@= +@@  =@: .@*  @@#
-# =@=    :@=    =@:     #@     @@      @+   @# +@   =@: :@+  %@  +@   =@: @#...@@:%+..:@+ #@...*@  @+   @# +@.  =@: @#    @#
-# @#     :@=    =@:    -%:     @@      @+   @# +@   =@: :#.  =@  +@   =@: @@@@@@@:@@@@@@+ #@@@@@@  @+   @# +@   =@: @#    @#
-# @#     :@=    =@:    -%=     @@      @+   @# +@   =@: :#.  =@  +@   =@: @%++++=:@#++++- #@+++++  @+   @# +@   =@: @#    @#
-# -@=    :@=    :%#     #@     @@-     @+   @# +@   =@: :#.  =@  +@   =@: @#      *%.     #@       @+   @# +@   =@: @@-  *@#
-#  @@%%%  +@%%%* *@%%%+ -@%%%- .@@%%%  @+   @# +@   =@: :#.  =@  +@   =@: :@%%%%  =@%%%%+ .@%%%%:  @+   @# +@   =@: :@@%%#@#
-#   =@@%   +@@%   -@@%=   @@@=   %@@-  @+   @# +@   =@: :#.  =%  +@   =@:  :@@@.   :%@@*    @@@=   @+   @# +@   =@:  :@@= @#
-#                                                                                                                        -@-
-#                                                                                                                    ====@#
-#                                                                                                                    @@@@=:
-#                                                                                                                    ::::
-#--------------------
 import tkinter as tk
 import time
 import threading
 import subprocess
 from tkinter import ttk
+
 root = tk.Tk()
 root.title('Windows Server Setup')
 root.geometry('500x500')
+
+# 添加自定義樣式來美化按鈕
+style = ttk.Style()
+style.configure('Custom.TButton', font=('Helvetica', 12), foreground='blue', padding=5)
+style.configure('Red.TButton', font=('Helvetica', 12), foreground='red', padding=5)
+style.configure('Green.TButton', font=('Helvetica', 12), foreground='green', padding=5)
 
 def powershell(command):
     subprocess.run(["powershell.exe", command])
 
 #-----<DHCP>-----
 
-    #-----<DHCP_Install>-----
+#-----<DHCP_Install>-----
 def DHCP_Install_Click():
     DHCP_install_thread = threading.Thread(target=installing_DHCP)
     DHCP_install_thread.start()
@@ -42,18 +30,33 @@ def installing_DHCP():
     DHCP_complete_thread = threading.Thread(target=Func_DHCP_complete)
     DHCP_complete_thread.start()
 
-
 def Func_DHCP_complete():
     DHCP_Install.config(text="Finished")  
     time.sleep(3)
     DHCP_Install.config(text="Install DHCP Feature")  
+
+#-----</DHCP_Install>-----
     
-    #-----</DHCP_Install>-----
+#-----<DHCP_Uninstall>-----
+def DHCP_Uninstall_Click():
+    DHCP_Uninstall_thread = threading.Thread(target=Uninstalling_DHCP)
+    DHCP_Uninstall_thread.start()
+    DHCP_Uninstall.config(text='Uninstalling')
 
-    #-----<DHCP_Setup>-----
+def Uninstalling_DHCP():
+    powershell("Install-WindowsFeature -Name 'DHCP' –IncludeManagementTools")
+    DHCP_complete_thread = threading.Thread(target=Func_UnDHCP_complete)
+    DHCP_complete_thread.start()
 
+def Func_UnDHCP_complete():
+    DHCP_Uninstall.config(text="Finished")  
+    time.sleep(3)
+    DHCP_Uninstall.config(text="Uninstall DHCP Feature")  
+#-----</DHCP_Uninstall>-----
+    
+#-----<DHCP_Setup>-----
 def DHCP_Setup_Click():
-        #-----<Read、Setup and close>-----
+    #-----<Read、Setup and close>-----
     def DHCP_Finish_Button():
         DHCP_Setup_thread = threading.Thread(target=read_DHCP_input)
         DHCP_Setup_thread.start()
@@ -82,16 +85,21 @@ def DHCP_Setup_Click():
         powershell(SetDHCPRouter)
         DHCP_Setup_Window.destroy()
         DHCP_Setup_Window.update()
-        #-----</Read、Setup and close>-----
+    
+    #-----</Read、Setup and close>-----
 
-        #-----<Just close>-----
+    #-----<Just close>-----
     def DHCP_Setup_Exit():
         DHCP_Setup_Window.destroy()
         DHCP_Setup_Window.update()
-        #-----</Just close>-----
+    #-----</Just close>-----
 
     DHCP_Setup_Window = tk.Toplevel(root)
     DHCP_Setup_Window.geometry("500x500")
+    # 設置窗口邊框樣式
+    DHCP_Setup_Window.configure(bg='white')
+    DHCP_Setup_Window.attributes('-alpha', 0.9)
+    DHCP_Setup_Window.attributes('-topmost', 'true')
 
     #<Entrys>
     StartRangelabel = tk.Label(DHCP_Setup_Window, text='StartRange:')
@@ -119,12 +127,13 @@ def DHCP_Setup_Click():
     Routerentry = tk.Entry(DHCP_Setup_Window)
     Routerentry.grid(row=5, column=1)
     #</Entrys>
-
-    Exit=tk.Button(DHCP_Setup_Window,text="Exit",command=DHCP_Setup_Exit)
-    Exit.grid(row=6,column=0)
-    read_input=tk.Button(DHCP_Setup_Window,text="Finish",command=DHCP_Finish_Button)
-    read_input.grid(row=6,column=1)   
+ 
+    Exit=ttk.Button(DHCP_Setup_Window, text="Exit", command=DHCP_Setup_Exit, style='Red.TButton')
+    Exit.grid(row=6,column=0,padx=20)
+    read_input=ttk.Button(DHCP_Setup_Window, text="Finish", command=DHCP_Finish_Button, style='Green.TButton')
+    read_input.grid(row=6,column=1)    
     #-----</DHCP_Setup>-----
+
 #----</DHCP>-----
     
 #----<DNS>-----
@@ -136,7 +145,7 @@ def DNS_Install_Click():
     DNS_Install.config(text='Installing')
 
 def installing_DNS():
-    powershell("powershell.exe Install-WindowsFeature -Name 'DNS' –IncludeManagementTools")
+    powershell("Install-WindowsFeature -Name 'DNS' –IncludeManagementTools")
     DNS_complete_thread = threading.Thread(target=Func_DNS_complete)
     DNS_complete_thread.start()
 
@@ -147,6 +156,26 @@ def Func_DNS_complete():
     DNS_Install.config(text="Install DNS Feature")  
     
     #-----</DNS_Install>-----
+
+    #-----<DNS_Uninstall>
+
+def DNS_Uninstall_Click():
+    DNS_Uninstall_thread = threading.Thread(target=Uninstalling_DNS)
+    DNS_Uninstall_thread.start()
+    DNS_Uninstall.config(text='Uninstalling')
+
+def Uninstalling_DNS():
+    powershell("Uninstall-WindowsFeature -Name 'DNS' –IncludeManagementTools")
+    DNS_complete_thread = threading.Thread(target=Func_UnDNS_complete)
+    DNS_complete_thread.start()
+
+
+def Func_UnDNS_complete():
+    DNS_Uninstall.config(text="Finished")  
+    time.sleep(3)
+    DNS_Uninstall.config(text="Uninstall DNS Feature")  
+    
+    #-----</DNS_Uninstall>-----
 
     #-----<DNS_Main_Window>-----
 def DNS_Setup_click():
@@ -316,13 +345,17 @@ def DNS_Setup_click():
 #----</DNS>-----
 
 #----<main>-----
-DHCP_Install = tk.Button(root, text='Install DHCP Feature', command=DHCP_Install_Click)
+DHCP_Install = ttk.Button(root, text='Install DHCP Feature', command=DHCP_Install_Click, style='Custom.TButton')
 DHCP_Install.pack()
-Setup_DHCP=tk.Button(root,text="Setup DHCP",command=DHCP_Setup_Click)
+DHCP_Uninstall = ttk.Button(root, text='Uninstall DHCP Feature', command=DHCP_Uninstall_Click, style='Custom.TButton')
+DHCP_Uninstall.pack()
+Setup_DHCP=ttk.Button(root,text="Setup DHCP",command=DHCP_Setup_Click, style='Custom.TButton')
 Setup_DHCP.pack()
-DNS_Install=tk.Button(root,text="Install DNS Feature",command=DNS_Install_Click)
+DNS_Install=ttk.Button(root,text="Install DNS Feature",command=DNS_Install_Click, style='Custom.TButton')
 DNS_Install.pack()
-Setup_DNS=tk.Button(root,text="Setup DNS",command=DNS_Setup_click)
+DNS_Uninstall=ttk.Button(root,text="Uninstall DNS Feature",command=DNS_Uninstall_Click, style='Custom.TButton')
+DNS_Uninstall.pack()
+Setup_DNS=ttk.Button(root,text="Setup DNS",command=DNS_Setup_click, style='Custom.TButton')
 Setup_DNS.pack()
 #----</main>-----
 root.mainloop()
