@@ -135,7 +135,27 @@ def DHCP_Setup_Click():
     #-----</DHCP_Setup>-----
 
 #----</DHCP>-----
-    
+def Remove_DHCP_Scope_Click():
+
+    def DHCP_Setup_Exit():
+        Remove_DHCP_Scope_Window.destroy()
+        Remove_DHCP_Scope_Window.update()
+
+    def DHCP_Finish_Button():
+        ScopeID=ScopeIDentry.get()
+        command="Remove-DhcpServerv4Scope -ScopeId "+ScopeID
+        powershell(command)
+
+    Remove_DHCP_Scope_Window = tk.Toplevel(root)
+    Remove_DHCP_Scope_Window.geometry("500x500")
+    ScopeIDlabel = tk.Label(Remove_DHCP_Scope_Window, text='StartRange:')
+    ScopeIDlabel.grid(row=0, column=0)
+    ScopeIDentry = tk.Entry(Remove_DHCP_Scope_Window)
+    ScopeIDentry.grid(row=0, column=1)
+    Exit=ttk.Button(Remove_DHCP_Scope_Window, text="Exit", command=DHCP_Setup_Exit, style='Red.TButton')
+    Exit.grid(row=6,column=0,padx=20)
+    read_input=ttk.Button(Remove_DHCP_Scope_Window, text="Finish", command=DHCP_Finish_Button, style='Green.TButton')
+    read_input.grid(row=6,column=1) 
 #----<DNS>-----
     #-----<DNS_Install>
 
@@ -351,6 +371,8 @@ DHCP_Uninstall = ttk.Button(root, text='Uninstall DHCP Feature', command=DHCP_Un
 DHCP_Uninstall.pack()
 Setup_DHCP=ttk.Button(root,text="Setup DHCP",command=DHCP_Setup_Click, style='Custom.TButton')
 Setup_DHCP.pack()
+Remove_DHCP_Scope=ttk.Button(root,text="Remove DHCP Scope",command=Remove_DHCP_Scope_Click, style='Custom.TButton')
+Remove_DHCP_Scope.pack()
 DNS_Install=ttk.Button(root,text="Install DNS Feature",command=DNS_Install_Click, style='Custom.TButton')
 DNS_Install.pack()
 DNS_Uninstall=ttk.Button(root,text="Uninstall DNS Feature",command=DNS_Uninstall_Click, style='Custom.TButton')
