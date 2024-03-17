@@ -148,7 +148,7 @@ def Remove_DHCP_Scope_Click():
 
     Remove_DHCP_Scope_Window = tk.Toplevel(root)
     Remove_DHCP_Scope_Window.geometry("500x500")
-    ScopeIDlabel = tk.Label(Remove_DHCP_Scope_Window, text='StartRange:')
+    ScopeIDlabel = tk.Label(Remove_DHCP_Scope_Window, text='ScopeID:')
     ScopeIDlabel.grid(row=0, column=0)
     ScopeIDentry = tk.Entry(Remove_DHCP_Scope_Window)
     ScopeIDentry.grid(row=0, column=1)
