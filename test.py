@@ -1,14 +1,16 @@
-import tkinter as tk
-
-win = tk.Tk()
-win.geometry("700x350")  # Set the size of the Tkinter window
-
-# Add a frame to set the size of the window
-my_frame = tk.Frame(win, relief="sunken")
-my_frame.grid(sticky="s")  # Make the frame sticky for both west and east
-
-# Create and add your widget (e.g., a button) to my_frame
-my_button = tk.Button(my_frame, text="Click Me")
-my_button.grid()  # By default, it will be centered within the frame
-
-win.mainloop()
+            def DNS_Finish_Button():
+                Zone=ZoneNameentry.get()
+                command="Remove-DnsServerZone -Name "+Zone
+                powershell(command)
+            def DNS_Setup_Exit():
+                Remove_DNS_Record_Window.destroy()
+            Remove_DNS_Record_Window=tk.Toplevel(Foward_Lookup_Zone_Window)
+            Remove_DNS_Record_Window.geometry("200x200")
+            ZoneNamelabel = tk.Label(Remove_DNS_Record_Window, text='ScopeID:')
+            ZoneNamelabel.grid(row=0, column=0)
+            ZoneNameentry = tk.Entry(Remove_DNS_Record_Window)
+            ZoneNameentry.grid(row=0, column=1)
+            Exit=ttk.Button(Remove_DNS_Record_Window, text="Exit", command=DNS_Setup_Exit, style='Red.TButton')
+            Exit.grid(row=6,column=0,padx=20)
+            read_input=ttk.Button(Remove_DNS_Record_Window, text="Finish", command=DNS_Finish_Button, style='Green.TButton')
+            read_input.grid(row=6,column=1)  
