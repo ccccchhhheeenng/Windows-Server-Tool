@@ -320,8 +320,9 @@ def DNS_Setup_click():
         def Remove_DNS_Zone_Click():
             def DNS_Finish_Button():
                 Zone=ZoneNameentry.get()
-                command="Remove-DnsServerZone -Name "+Zone
+                command="Remove-DnsServerZone -Name "+Zone+" -Force"
                 powershell(command)
+                Remove_DNS_Zone_Window.destroy()
             def DNS_Setup_Exit():
                 Remove_DNS_Zone_Window.destroy()
             Remove_DNS_Zone_Window=tk.Toplevel(Foward_Lookup_Zone_Window)
@@ -338,12 +339,14 @@ def DNS_Setup_click():
             def DNS_Finish_Button():
                 Zone=ZoneNameentry.get()
                 Record=RecordNameentry.get()
-                command="Remove-DnsServerResourceRecord -ZoneName "+Zone+" -Name "+Record
+                type=str(Set_Record_Type.get())
+                command="Remove-DnsServerResourceRecord -ZoneName "+Zone+" -Name "+Record+" -RRType "+type+" -Force"
                 powershell(command)
+                Remove_DNS_Record_Window.destroy()
             def DNS_Setup_Exit():
                 Remove_DNS_Record_Window.destroy()
             Remove_DNS_Record_Window=tk.Toplevel(Foward_Lookup_Zone_Window)
-            Remove_DNS_Record_Window.geometry("200x200")
+            Remove_DNS_Record_Window.geometry("500x500")
             ZoneNamelabel = tk.Label(Remove_DNS_Record_Window, text='ScopeID:')
             ZoneNamelabel.grid(row=0, column=0)
             ZoneNameentry = tk.Entry(Remove_DNS_Record_Window)
@@ -352,6 +355,8 @@ def DNS_Setup_click():
             RecordNamelabel.grid(row=1, column=0)
             RecordNameentry = tk.Entry(Remove_DNS_Record_Window)
             RecordNameentry.grid(row=1, column=1)
+            Set_Record_Type=ttk.Combobox(Remove_DNS_Record_Window,values=["A","AAAA","CName"])
+            Set_Record_Type.grid(row=2,column=0)
             Exit=ttk.Button(Remove_DNS_Record_Window, text="Exit", command=DNS_Setup_Exit, style='Red.TButton')
             Exit.grid(row=6,column=0,padx=20)
             read_input=ttk.Button(Remove_DNS_Record_Window, text="Finish", command=DNS_Finish_Button, style='Green.TButton')
