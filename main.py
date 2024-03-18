@@ -392,6 +392,7 @@ def DNS_Setup_click():
                 zonefile+="in-addr.arpa.dns"
                 command="Add-DnsServerPrimaryZone -NetworkID "+NetworkID+" -ZoneFile "+zonefile
                 powershell(command)
+                Add_Zone_Window.destroy()
             Add_Zone_Window=tk.Toplevel(Reverse_Lookup_Zone_Window)
             Add_Zone_Window.geometry("200x200")
             NetworkID_Label=tk.Label(Add_Zone_Window,text="NetworkID:")
@@ -401,8 +402,31 @@ def DNS_Setup_click():
             Add_Reverse_Zone_input=tk.Button(Add_Zone_Window,text="Finish",command=Add_Reverse_Zone_input_Click)
             Add_Reverse_Zone_input.grid(row=1,column=1)
 
+        def Remove_Zone_Button_Click():
+            def Remove_Reverse_Zone_input_Click():
+                NetworkID=NetworkID_Entry.get()
+                tmp=NetworkID.split(".")
+                ID=""
+                for i in range(3):
+                    ID+=tmp[2-i]
+                    ID+="."
+                ID+="in-addr.arpa"
+                command="Remove-DnsServerZone "+ID+" -Force"
+                powershell(command)
+                Remove_Zone_Window.destroy()
+            Remove_Zone_Window=tk.Toplevel(Reverse_Lookup_Zone_Window)
+            Remove_Zone_Window.geometry("200x200")
+            NetworkID_Label=tk.Label(Remove_Zone_Window,text="NetworkID:")
+            NetworkID_Label.grid(row=0,column=0)
+            NetworkID_Entry=tk.Entry(Remove_Zone_Window)
+            NetworkID_Entry.grid(row=0,column=1)
+            Add_Reverse_Zone_input=tk.Button(Remove_Zone_Window,text="Finish",command=Remove_Reverse_Zone_input_Click)
+            Add_Reverse_Zone_input.grid(row=1,column=1)
+
         Add_Zone_Button=tk.Button(Reverse_Lookup_Zone_Window,text="Add Zone",command=Add_Zone_Button_Click)
         Add_Zone_Button.pack()
+        Remove_Zone_Button=tk.Button(Reverse_Lookup_Zone_Window,text="Remove Zone",command=Remove_Zone_Button_Click)
+        Remove_Zone_Button.pack()
         #-----</Reverse lookup zone>-----
 
         #----<DNS Fowarder>----
