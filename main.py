@@ -44,7 +44,7 @@ def DHCP_Uninstall_Click():
     DHCP_Uninstall.config(text='Uninstalling')
 
 def Uninstalling_DHCP():
-    powershell("Install-WindowsFeature -Name 'DHCP' –IncludeManagementTools")
+    powershell("Uninstall-WindowsFeature -Name 'DHCP' –IncludeManagementTools")
     DHCP_complete_thread = threading.Thread(target=Func_UnDHCP_complete)
     DHCP_complete_thread.start()
 
@@ -374,9 +374,37 @@ def DNS_Setup_click():
             #----<DNS Record>----
         
         #-----</Foward lookup zone>-----
+
+        #-----<Reverse lookup zone>-----
     def Reverse_Lookup_Zone_Click():
         Reverse_Lookup_Zone_Window=tk.Toplevel(DNS_Setup_Window)
         Reverse_Lookup_Zone_Window.geometry("200x200")
+
+        def Add_Zone_Button_Click():
+            def Add_Reverse_Zone_input_Click():
+                NetworkID=NetworkID_Entry.get()
+                tmp=NetworkID.split(".")
+                zonefile=""
+                for i in range(3):
+                    zonefile+=tmp[2-i]
+                    zonefile+="."
+                NetworkID=NetworkID+"/24"
+                zonefile+="in-addr.arpa.dns"
+                command="Add-DnsServerPrimaryZone -NetworkID "+NetworkID+" -ZoneFile "+zonefile
+                powershell(command)
+            Add_Zone_Window=tk.Toplevel(Reverse_Lookup_Zone_Window)
+            Add_Zone_Window.geometry("200x200")
+            NetworkID_Label=tk.Label(Add_Zone_Window,text="NetworkID:")
+            NetworkID_Label.grid(row=0,column=0)
+            NetworkID_Entry=tk.Entry(Add_Zone_Window)
+            NetworkID_Entry.grid(row=0,column=1)
+            Add_Reverse_Zone_input=tk.Button(Add_Zone_Window,text="Finish",command=Add_Reverse_Zone_input_Click)
+            Add_Reverse_Zone_input.grid(row=1,column=1)
+
+        Add_Zone_Button=tk.Button(Reverse_Lookup_Zone_Window,text="Add Zone",command=Add_Zone_Button_Click)
+        Add_Zone_Button.pack()
+        #-----</Reverse lookup zone>-----
+
         #----<DNS Fowarder>----
     def Set_Fowarder_Click():
             #----<Set DNS Fowarder>----
