@@ -444,7 +444,7 @@ def DNS_Setup_click():
             PTRDomainName_Entry=tk.Entry(Add_PTR_Record_Window)
             PTRDomainName_Entry.grid(row=2,column=1)
             Add_PTR_Record_input=tk.Button(Add_PTR_Record_Window,text="Finish",command=Add_PTR_Record_input_Click)
-
+            Add_PTR_Record_input.grid(row=3,column=1)
         Add_Zone_Button=tk.Button(Reverse_Lookup_Zone_Window,text="Add Zone",command=Add_Zone_Button_Click)
         Add_Zone_Button.pack()
         Remove_Zone_Button=tk.Button(Reverse_Lookup_Zone_Window,text="Remove Zone",command=Remove_Zone_Button_Click)
