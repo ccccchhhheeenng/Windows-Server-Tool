@@ -422,11 +422,35 @@ def DNS_Setup_click():
             NetworkID_Entry.grid(row=0,column=1)
             Add_Reverse_Zone_input=tk.Button(Remove_Zone_Window,text="Finish",command=Remove_Reverse_Zone_input_Click)
             Add_Reverse_Zone_input.grid(row=1,column=1)
+        def Add_PTR_Record_Click():
+            def Add_PTR_Record_input_Click():
+                Name=name_Entry.get()
+                ZoneName=ZoneName_Entry.get()
+                PTRDomainName=PTRDomainName_Entry.get()
+                command="Add-DnsServerResourceRecordPtr -Name "+Name+" -ZoneName "+ZoneName+" -PtrDomainName "+PTRDomainName
+                powershell(command)
+            Add_PTR_Record_Window=tk.Toplevel(Reverse_Lookup_Zone_Window)
+            Add_PTR_Record_Window.geometry("200x200")
+            Name_Label=tk.Label(Add_PTR_Record_Window,text="Name:")
+            Name_Label.grid(row=0,column=0)
+            name_Entry=tk.Entry(Add_PTR_Record_Window)
+            name_Entry.grid(row=0,column=1)
+            ZoneName_Label=tk.Label(Add_PTR_Record_Window,text="ZoneName:")
+            ZoneName_Label.grid(row=1,column=0)
+            ZoneName_Entry=tk.Entry(Add_PTR_Record_Window)
+            ZoneName_Entry.grid(row=1,column=1)
+            PTRDomainName_Label=tk.Label(Add_PTR_Record_Window,text="PTRDomainName:")
+            PTRDomainName_Label.grid(row=2,column=0)
+            PTRDomainName_Entry=tk.Entry(Add_PTR_Record_Window)
+            PTRDomainName_Entry.grid(row=2,column=1)
+            Add_PTR_Record_input=tk.Button(Add_PTR_Record_Window,text="Finish",command=Add_PTR_Record_input_Click)
 
         Add_Zone_Button=tk.Button(Reverse_Lookup_Zone_Window,text="Add Zone",command=Add_Zone_Button_Click)
         Add_Zone_Button.pack()
         Remove_Zone_Button=tk.Button(Reverse_Lookup_Zone_Window,text="Remove Zone",command=Remove_Zone_Button_Click)
         Remove_Zone_Button.pack()
+        Add_PTR_Record=tk.Button(Reverse_Lookup_Zone_Window,text="Add PTR Record",command=Add_PTR_Record_Click)
+        Add_PTR_Record.pack()
         #-----</Reverse lookup zone>-----
 
         #----<DNS Fowarder>----
