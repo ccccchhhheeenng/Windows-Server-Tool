@@ -447,14 +447,16 @@ def DNS_Setup_click():
             Add_PTR_Record_in-put.grid(row=3,column=1)
         def Remove_PTR_Record_Click():
             Remove_PTR_Record_Window=tk.Toplevel(Reverse_Lookup_Zone_Window)
-            Remove_PTR_Record_Window.geometry("200x200")           
+            Remove_PTR_Record_Window.geometry("200x200")
+                   
         Add_Zone_Button=tk.Button(Reverse_Lookup_Zone_Window,text="Add Zone",command=Add_Zone_Button_Click)
         Add_Zone_Button.pack()
         Remove_Zone_Button=tk.Button(Reverse_Lookup_Zone_Window,text="Remove Zone",command=Remove_Zone_Button_Click)
         Remove_Zone_Button.pack()
-        Add_PTR_Record=tk.Button(Reverse_Lookup_Zone_Window,text="Add PTR Record",command=Add_PTR_Record_Click)
-        Add_PTR_Record.pack()
-        
+        Add_PTR_Record_Button=tk.Button(Reverse_Lookup_Zone_Window,text="Add PTR Record",command=Add_PTR_Record_Click)
+        Add_PTR_Record_Button.pack()
+        Remove_PTR_Record_Button=tk.Button(Reverse_Lookup_Zone_Window,text="Remove PTR Record",command=Remove_PTR_Record_Click)
+        Remove_PTR_Record_Button.pack()
         #-----</Reverse lookup zone>-----
 
         #----<DNS Fowarder>----
