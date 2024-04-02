@@ -223,7 +223,7 @@ def DNS_Setup_click():
             ZoneNamelabel.grid(row=0,column=0)
             ZoneNameEntry=tk.Entry(Add_Primary_Button_Window)
             ZoneNameEntry.grid(row=0,column=1)
-            Add_Primart_Zone_input=tk.Button(Add_Primary_Button_Window,text="Finish",command=Add_Primary_Zone_Click)
+            Add_Primart_Zone_input=ttk.Button(Add_Primary_Button_Window,text="Finish",command=Add_Primary_Zone_Click, style='Green.TButton')
             Add_Primart_Zone_input.grid(row=1,column=1)
             #-----</Primary Zone Setting>-----
 
@@ -254,7 +254,7 @@ def DNS_Setup_click():
                     IPv4Address_Label.grid(row=1,column=0)
                     IPv4Address_Entry=tk.Entry(Add_A_Record_Window)
                     IPv4Address_Entry.grid(row=1,column=1)
-                    A_input=tk.Button(Add_A_Record_Window,text="Finish",command=A_input_Click)
+                    A_input=ttk.Button(Add_A_Record_Window,text="Finish",command=A_input_Click, style='Green.TButton')
                     A_input.grid(row=2,column=1)
                 elif tmp=="AAAA":
                     def AAAA_input_Click():
@@ -278,7 +278,7 @@ def DNS_Setup_click():
                     IPv6Address_Label.grid(row=1,column=0)
                     IPv6Address_Entry=tk.Entry(Add_AAAA_Record_Window)
                     IPv6Address_Entry.grid(row=1,column=1)
-                    AAAA_input=tk.Button(Add_AAAA_Record_Window,text="Finish",command=AAAA_input_Click)
+                    AAAA_input=ttk.Button(Add_AAAA_Record_Window,text="Finish",command=AAAA_input_Click, style='Green.TButton')
                     AAAA_input.grid(row=2,column=1)
                 else:
                     def CName_input_Click():
@@ -302,7 +302,7 @@ def DNS_Setup_click():
                     HostNameAlias_Label.grid(row=1,column=0)
                     HostNameAlias_Entry=tk.Entry(Add_CName_Record_Window)
                     HostNameAlias_Entry.grid(row=1,column=1)
-                    CName_input=tk.Button(Add_CName_Record_Window,text="Finish",command=CName_input_Click)
+                    CName_input=ttk.Button(Add_CName_Record_Window,text="Finish",command=CName_input_Click, style='Green.TButton')
                     CName_input.grid(row=2,column=1)
 
             Add_DNS_Record_Window=tk.Toplevel(Foward_Lookup_Zone_Window)
@@ -314,7 +314,7 @@ def DNS_Setup_click():
             #---<!!!!!!!需合併column!!!!!>---
             Set_Record_Type=ttk.Combobox(Add_DNS_Record_Window,values=["A","AAAA","CName"])
             Set_Record_Type.grid(row=1,column=0)
-            DNS_Record_input=tk.Button(Add_DNS_Record_Window,text="Finish",command=DNS_Record_input_Click)
+            DNS_Record_input=ttk.Button(Add_DNS_Record_Window,text="Finish",command=DNS_Record_input_Click, style='Green.TButton')
             DNS_Record_input.grid(row=2,column=0)
                 #----</ADD DNS Record>----
         def Remove_DNS_Zone_Click():
@@ -363,13 +363,13 @@ def DNS_Setup_click():
             read_input.grid(row=6,column=1)            
         Foward_Lookup_Zone_Window=tk.Toplevel(DNS_Setup_Window)
         Foward_Lookup_Zone_Window.geometry("200x200")
-        Add_Primary_Zone_Button=tk.Button(Foward_Lookup_Zone_Window,text="Add Primary Zone",command=Add_Primary_Button_Click)
+        Add_Primary_Zone_Button=ttk.Button(Foward_Lookup_Zone_Window,text="Add Primary Zone",command=Add_Primary_Button_Click, style='Custom.TButton')
         Add_Primary_Zone_Button.pack()
-        Add_DNS_Record_Button=tk.Button(Foward_Lookup_Zone_Window,text="Add DNS Record",command=Add_DNS_Record_Click)
+        Add_DNS_Record_Button=ttk.Button(Foward_Lookup_Zone_Window,text="Add DNS Record",command=Add_DNS_Record_Click, style='Custom.TButton')
         Add_DNS_Record_Button.pack()
-        Remove_DNS_Zone_Button=tk.Button(Foward_Lookup_Zone_Window,text="Remove DNS Zone",command=Remove_DNS_Zone_Click)
+        Remove_DNS_Zone_Button=ttk.Button(Foward_Lookup_Zone_Window,text="Remove DNS Zone",command=Remove_DNS_Zone_Click, style='Custom.TButton')
         Remove_DNS_Zone_Button.pack()
-        Remove_DNS_Record_Button=tk.Button(Foward_Lookup_Zone_Window,text="Remove DNS Recoed",command=Remove_DNS_Record_Click)
+        Remove_DNS_Record_Button=ttk.Button(Foward_Lookup_Zone_Window,text="Remove DNS Recoed",command=Remove_DNS_Record_Click, style='Custom.TButton')
         Remove_DNS_Record_Button.pack()       
             #----<DNS Record>----
         
@@ -399,7 +399,7 @@ def DNS_Setup_click():
             NetworkID_Label.grid(row=0,column=0)
             NetworkID_Entry=tk.Entry(Add_Zone_Window)
             NetworkID_Entry.grid(row=0,column=1)
-            Add_Reverse_Zone_input=tk.Button(Add_Zone_Window,text="Finish",command=Add_Reverse_Zone_input_Click)
+            Add_Reverse_Zone_input=ttk.Button(Add_Zone_Window,text="Finish",command=Add_Reverse_Zone_input_Click, style='Green.TButton')
             Add_Reverse_Zone_input.grid(row=1,column=1)
 
         def Remove_Zone_Button_Click():
@@ -420,7 +420,7 @@ def DNS_Setup_click():
             NetworkID_Label.grid(row=0,column=0)
             NetworkID_Entry=tk.Entry(Remove_Zone_Window)
             NetworkID_Entry.grid(row=0,column=1)
-            Add_Reverse_Zone_input=tk.Button(Remove_Zone_Window,text="Finish",command=Remove_Reverse_Zone_input_Click)
+            Add_Reverse_Zone_input=ttk.Button(Remove_Zone_Window,text="Finish",command=Remove_Reverse_Zone_input_Click, style='Green.TButton')
             Add_Reverse_Zone_input.grid(row=1,column=1)
         def Add_PTR_Record_Click():
             def Add_PTR_Record_input_Click():
@@ -443,8 +443,8 @@ def DNS_Setup_click():
             PTRDomainName_Label.grid(row=2,column=0)
             PTRDomainName_Entry=tk.Entry(Add_PTR_Record_Window)
             PTRDomainName_Entry.grid(row=2,column=1)
-            Add_PTR_Record_input=tk.Button(Add_PTR_Record_Window,text="Finish",command=Add_PTR_Record_input_Click)
-            Add_PTR_Record_in-put.grid(row=3,column=1)
+            Add_PTR_Record_input=ttk.Button(Add_PTR_Record_Window,text="Finish",command=Add_PTR_Record_input_Click, style='Green.TButton')
+            Add_PTR_Record_input.grid(row=3,column=1)
         def Remove_PTR_Record_Click():
             def Remove_PTR_Record_input_Click():
                 Name=name_Entry.get()
@@ -462,7 +462,7 @@ def DNS_Setup_click():
             ZoneName_Entry=tk.Entry(Remove_PTR_Record_Window)
             ZoneName_Entry.grid(row=1,column=1)
             Remove_PTR_Record_input=tk.Button(Remove_PTR_Record_Window,text="Finish",command=Remove_PTR_Record_input_Click)
-            Remove_PTR_Record_in-put.grid(row=3,column=1)         
+            Remove_PTR_Record_input.grid(row=3,column=1)         
         Add_Zone_Button=tk.Button(Reverse_Lookup_Zone_Window,text="Add Zone",command=Add_Zone_Button_Click)
         Add_Zone_Button.pack()
         Remove_Zone_Button=tk.Button(Reverse_Lookup_Zone_Window,text="Remove Zone",command=Remove_Zone_Button_Click)
