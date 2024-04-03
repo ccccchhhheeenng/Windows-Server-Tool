@@ -468,7 +468,13 @@ def DNS_Setup_click():
             def Remove_PTR_Record_input_Click():
                 Name=name_Entry.get()
                 ZoneName=ZoneName_Entry.get()   
-                command="Remove-DnsServerResourceRecord -ZoneName "+ZoneName+" -RRType PTR -Name "+Name+" -Force"
+                tmp=ZoneName.split(".")
+                ID=""
+                for i in range(3):
+                    ID+=tmp[2-i]
+                    ID+="."
+                ID+="in-addr.arpa"
+                command="Remove-DnsServerResourceRecord -ZoneName "+ID+" -RRType PTR -Name "+Name+" -Force"
                 powershell(command)
             Remove_PTR_Record_Window=tk.Toplevel(Reverse_Lookup_Zone_Window)
             Remove_PTR_Record_Window.title("Remove PTR Record") 
@@ -477,7 +483,7 @@ def DNS_Setup_click():
             Name_Label.grid(row=0,column=0)
             name_Entry=tk.Entry(Remove_PTR_Record_Window)
             name_Entry.grid(row=0,column=1)
-            ZoneName_Label=tk.Label(Remove_PTR_Record_Window,text="ZoneName:")
+            ZoneName_Label=tk.Label(Remove_PTR_Record_Window,text="ZoneName(ID):")
             ZoneName_Label.grid(row=1,column=0)
             ZoneName_Entry=tk.Entry(Remove_PTR_Record_Window)
             ZoneName_Entry.grid(row=1,column=1)
