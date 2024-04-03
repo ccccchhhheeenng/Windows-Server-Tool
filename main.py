@@ -439,7 +439,7 @@ def DNS_Setup_click():
                 Name=name_Entry.get()
                 ZoneName=ZoneName_Entry.get()
                 PTRDomainName=PTRDomainName_Entry.get()
-                tmp=PTRDomainName.split(".")
+                tmp=ZoneName.split(".")
                 ID=""
                 for i in range(3):
                     ID+=tmp[2-i]
