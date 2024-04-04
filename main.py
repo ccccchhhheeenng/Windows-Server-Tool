@@ -756,7 +756,7 @@ Uninstall_iSCSITarget=ttk.Button(root,text="Unistall iSCSI target",command=iSCSI
 Uninstall_iSCSITarget.pack()
 Setup_iSCSI_Disk_Share=ttk.Button(root,text="Setup iSCSI Disk Share",command=Setup_iSCSI_Disk_Share_Click, style='Custom.TButton')
 Setup_iSCSI_Disk_Share.pack()
-Restart_Computer=ttk.Button(root,text="Restart This Computer",command=Restart, style='Custom.TButton')
+Restart_Computer=ttk.Button(root,text="Restart This Computer",command=Restart, style='Red.TButton')
 Restart_Computer.pack()
 #----</main>-----
 root.mainloop()
