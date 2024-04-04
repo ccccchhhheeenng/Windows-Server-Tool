@@ -7,7 +7,7 @@ from tkinter import ttk
 root = tk.Tk()
 root.title('Windows Server Setup')
 root.geometry('400x400')
-root.iconbitmap("Python-GUI--Setup-Windows-Server-with-powershell\icon.ico")
+# root.iconbitmap(".\icon.ico")
 # 添加自定義樣式來美化按鈕
 style = ttk.Style()
 style.configure('Custom.TButton', font=('Helvetica', 12), foreground='blue', padding=5)
