@@ -705,7 +705,9 @@ def Setup_iSCSI_Disk_Share_Click():
     Add_VirtualDisk.pack()
     Share_VirtualDisk=ttk.Button(iSCSI_Setup_Window,text="Share VirtualDisk by iSCSI",command=Share_VirtualDisk_Click, style='Custom.TButton')
     Share_VirtualDisk.pack()
-
+def Restart():
+    command="shutdown -r -t 0"
+    powershell(command)
 #----<main>-----
 DHCP_Install = ttk.Button(root, text='Install DHCP Feature', command=DHCP_Install_Click, style='Custom.TButton')
 DHCP_Install.pack()
@@ -727,5 +729,7 @@ Uninstall_iSCSITarget=ttk.Button(root,text="Unistall iSCSI target",command=iSCSI
 Uninstall_iSCSITarget.pack()
 Setup_iSCSI_Disk_Share=ttk.Button(root,text="Setup iSCSI Disk Share",command=Setup_iSCSI_Disk_Share_Click, style='Custom.TButton')
 Setup_iSCSI_Disk_Share.pack()
+Restart_Computer=ttk.Button(root,text="Restart This Computer",command=Restart, style='Custom.TButton')
+Restart_Computer.pack()
 #----</main>-----
 root.mainloop()
