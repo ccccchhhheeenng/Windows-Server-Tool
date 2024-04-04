@@ -637,8 +637,10 @@ def Setup_iSCSI_Disk_Share_Click():
             Add_VDisk_input.config(text="Please Wait")
         def Add_VDisk_input_thread():
             path=VDisk_PathEntry.get()
+            name=VDisk_NameEntry.get()
+            disk=path+name
             size=VDisk_SizeEntry.get()
-            command="New-IscsiVirtualDisk -Path "+path+" -size "+size
+            command="New-IscsiVirtualDisk -Path "+disk+" -size "+size
             powershell(command)
             Add_VirtualDisk_Window.destroy()
         def Exit_Window():
@@ -651,14 +653,18 @@ def Setup_iSCSI_Disk_Share_Click():
         VDisk_PathLabel.grid(row=0,column=0)
         VDisk_PathEntry=tk.Entry(Add_VirtualDisk_Window)
         VDisk_PathEntry.grid(row=0,column=1)
-        VDisk_SizeLabel=tk.Label(Add_VirtualDisk_Window,text="VDisk Size")
-        VDisk_SizeLabel.grid(row=1,column=0)
+        VDisk_NameLabel=tk.Label(Add_VirtualDisk_Window,text="VDisk Name(Ex:DiskName.vhdx)")
+        VDisk_NameLabel.grid(row=1,column=0)
+        VDisk_NameEntry=tk.Entry(Add_VirtualDisk_Window)
+        VDisk_NameEntry.grid(row=1,column=1)
+        VDisk_SizeLabel=tk.Label(Add_VirtualDisk_Window,text="VDisk Size(Ex:10GB)")
+        VDisk_SizeLabel.grid(row=2,column=0)
         VDisk_SizeEntry=tk.Entry(Add_VirtualDisk_Window)
-        VDisk_SizeEntry.grid(row=1,column=1)
+        VDisk_SizeEntry.grid(row=2,column=1)
         Exit=ttk.Button(Add_VirtualDisk_Window,text="Exit",command=Exit_Window, style='Red.TButton')
-        Exit.grid(row=2,column=0,padx=20)
+        Exit.grid(row=3,column=0,padx=20)
         Add_VDisk_input=ttk.Button(Add_VirtualDisk_Window,text="Finish",command=Add_VDisk_input_Click, style='Green.TButton')
-        Add_VDisk_input.grid(row=2,column=1)
+        Add_VDisk_input.grid(row=3,column=1)
     def Share_VirtualDisk_Click():
         def Share_VDisk_input_Click():
             Share_VDisk_input_Start=threading.Thread(target=Share_VDisk_input_thread)
