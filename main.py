@@ -7,7 +7,7 @@ from tkinter import ttk
 root = tk.Tk()
 root.title('Windows Server Setup')
 root.geometry('400x400')
-
+root.iconbitmap("Python-GUI--Setup-Windows-Server-with-powershell\icon.ico")
 # 添加自定義樣式來美化按鈕
 style = ttk.Style()
 style.configure('Custom.TButton', font=('Helvetica', 12), foreground='blue', padding=5)
@@ -195,7 +195,7 @@ def Func_UnDNS_complete():
     DNS_Uninstall.config(text="Finished")  
     time.sleep(3)
     DNS_Uninstall.config(text="Uninstall DNS Feature")  
-    
+
     #-----</DNS_Uninstall>-----
 
     #-----<DNS_Main_Window>-----
