@@ -1,1 +1,0 @@
-Add-DnsServerPrimaryZone -NetworkID  0.168.192.in-addr.arpa.dns

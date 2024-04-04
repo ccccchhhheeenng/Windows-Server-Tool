@@ -247,7 +247,7 @@ def DNS_Setup_click():
                         IPv4Address=IPv4Address_Entry.get()
                         command="Add-DnsServerResourceRecordA -Name "+name+" -ZoneName "+zone+" -IPv4Address "+IPv4Address
                         powershell(command)
-                        Add_A_Record_Window.destroy()
+                        Add_DNS_Record_Window.destroy()
                     Add_A_Record_Window=tk.Toplevel(Add_DNS_Record_Window)
                     Add_A_Record_Window.title("Add A Record") 
                     Add_A_Record_Window.geometry("320x200")
@@ -272,7 +272,7 @@ def DNS_Setup_click():
                         IPv6Address=IPv6Address_Entry.get()
                         command="Add-DnsServerResourceRecordAAAA -Name "+name+" -ZoneName "+zone+" -IPv6Address "+IPv6Address
                         powershell(command)
-                        Add_AAAA_Record_Window.destroy()
+                        Add_DNS_Record_Window.destroy()
                     Add_AAAA_Record_Window=tk.Toplevel(Add_DNS_Record_Window)
                     Add_AAAA_Record_Window.title("Add AAAA Record") 
                     Add_AAAA_Record_Window.geometry("320x200")
@@ -297,7 +297,7 @@ def DNS_Setup_click():
                         HostNameAlias=HostNameAlias_Entry.get()
                         command="Add-DnsServerResourceRecordCName -Name "+name+" -ZoneName "+zone+" -HostNameAlias "+HostNameAlias
                         powershell(command)
-                        Add_CName_Record_Window.destroy()
+                        Add_DNS_Record_Window.destroy()
                     Add_CName_Record_Window=tk.Toplevel(Add_DNS_Record_Window)
                     Add_CName_Record_Window.title("Add CNAME Record") 
                     Add_CName_Record_Window.geometry("320x200")
@@ -592,10 +592,39 @@ def DNS_Setup_click():
         
         
 #----</DNS>-----
-def iSCSI_target_install_click():
-    powershell("Install-WindowsFeature -Name FS-iSCSITarget-Server")
+
 def iSCSI_target_Uninstall_click():
+    iSCSI_Uninstall_thread = threading.Thread(target=Uninstalling_iSCSI)
+    iSCSI_Uninstall_thread.start()
+    Uninstall_iSCSITarget.config(text='Uninstalling')
+
+def Uninstalling_iSCSI():
     powershell("Uninstall-WindowsFeature -Name FS-iSCSITarget-Server")
+    iSCSI_complete_thread = threading.Thread(target=Func_UniSCSI_complete)
+    iSCSI_complete_thread.start()
+
+
+def Func_UniSCSI_complete():
+    Uninstall_iSCSITarget.config(text="Finished")  
+    time.sleep(3)
+    Uninstall_iSCSITarget.config(text="Uninstall iSCSI Feature") 
+
+def iSCSI_target_install_click():
+    iSCSI_install_thread = threading.Thread(target=installing_iSCSI)
+    iSCSI_install_thread.start()
+    Install_iSCSITarget.config(text='Installing')
+
+def installing_iSCSI():
+    powershell("Install-WindowsFeature -Name FS-iSCSITarget-Server")
+    iSCSI_complete_thread = threading.Thread(target=Func_iSCSI_complete)
+    iSCSI_complete_thread.start()
+
+
+def Func_iSCSI_complete():
+    Install_iSCSITarget.config(text="Finished")  
+    time.sleep(3)
+    Install_iSCSITarget.config(text="Install iSCSI Feature") 
+
 
 def Setup_iSCSI_Disk_Share_Click():
     iSCSI_Setup_Window=tk.Toplevel(root)

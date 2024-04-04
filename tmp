@@ -1,4 +1,0 @@
-        DiskPathLabel=tk.Label(Share_VirtualDisk_Window,text="User Name")
-        DiskPathLabel.grid(row=0,column=0)
-        DiskPathEntry=tk.Entry(Share_VirtualDisk_Window)
-        DiskPathEntry.grid(row=0,column=1)
