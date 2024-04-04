@@ -217,7 +217,8 @@ def DNS_Setup_click():
                 powershell(command)
                 Add_Primary_Button_Window.destroy()
                 #-----</Add>-----
-                
+            def Exit_Window():
+                Add_Primary_Button_Window.destroy()  
             Add_Primary_Button_Window=tk.Toplevel(Foward_Lookup_Zone_Window)
             Add_Primary_Button_Window.title("Add Primary Button") 
             Add_Primary_Button_Window.geometry("320x200")
@@ -225,6 +226,8 @@ def DNS_Setup_click():
             ZoneNamelabel.grid(row=0,column=0)
             ZoneNameEntry=tk.Entry(Add_Primary_Button_Window)
             ZoneNameEntry.grid(row=0,column=1)
+            Exit=ttk.Button(Add_Primary_Button_Window,text="Exit",command=Exit_Window, style='Red.TButton')
+            Exit.grid(row=1,column=0)
             Add_Primart_Zone_input=ttk.Button(Add_Primary_Button_Window,text="Finish",command=Add_Primary_Zone_Click, style='Green.TButton')
             Add_Primart_Zone_input.grid(row=1,column=1)
             #-----</Primary Zone Setting>-----
@@ -309,7 +312,8 @@ def DNS_Setup_click():
                     HostNameAlias_Entry.grid(row=1,column=1)
                     CName_input=ttk.Button(Add_CName_Record_Window,text="Finish",command=CName_input_Click, style='Green.TButton')
                     CName_input.grid(row=2,column=1)
-
+            def Exit_Window():
+                Add_DNS_Record_Window.destroy()
             Add_DNS_Record_Window=tk.Toplevel(Foward_Lookup_Zone_Window)
             Add_DNS_Record_Window.title("Add DNS Record") 
             Add_DNS_Record_Window.geometry("320x200")
@@ -320,15 +324,21 @@ def DNS_Setup_click():
             #---<!!!!!!!需合併column!!!!!>---
             Set_Record_Type=ttk.Combobox(Add_DNS_Record_Window,values=["A","AAAA","CName"])
             Set_Record_Type.grid(row=1,column=0)
+            Exit=ttk.Button(Add_DNS_Record_Window,text="Exit",command=Exit_Window, style='Red.TButton')
+            Exit.grid(row=2,column=0)
             DNS_Record_input=ttk.Button(Add_DNS_Record_Window,text="Finish",command=DNS_Record_input_Click, style='Green.TButton')
-            DNS_Record_input.grid(row=2,column=0)
+            DNS_Record_input.grid(row=2,column=1)
                 #----</ADD DNS Record>----
         def Remove_DNS_Zone_Click():
             def DNS_Finish_Button():
+                DNS_Remove_thread=threading.Thread(target=Remove_Start)
+                DNS_Remove_thread.start()
+                read_input.config(text="Please Wait")
+            def Remove_Start():
                 Zone=ZoneNameentry.get()
                 command="Remove-DnsServerZone -Name "+Zone+" -Force"
                 powershell(command)
-                Remove_DNS_Zone_Window.destroy()
+                Remove_DNS_Zone_Window.destroy()                
             def DNS_Setup_Exit():
                 Remove_DNS_Zone_Window.destroy()
             Remove_DNS_Zone_Window=tk.Toplevel(Foward_Lookup_Zone_Window)
@@ -344,6 +354,10 @@ def DNS_Setup_click():
             read_input.grid(row=6,column=1)            
         def Remove_DNS_Record_Click():
             def DNS_Finish_Button():
+                DNS_Remove_thread=threading.Thread(target=Remove_Start)
+                DNS_Remove_thread.start()
+                read_input.config(text="Please Wait")
+            def Remove_Start():
                 Zone=ZoneNameentry.get()
                 Record=RecordNameentry.get()
                 type=str(Set_Record_Type.get())
@@ -363,8 +377,10 @@ def DNS_Setup_click():
             RecordNamelabel.grid(row=1, column=0)
             RecordNameentry = tk.Entry(Remove_DNS_Record_Window)
             RecordNameentry.grid(row=1, column=1)
+            Set_Record_Type_label=tk.Label(Remove_DNS_Record_Window,text="Type")
+            Set_Record_Type_label.grid(row=2,column=0)
             Set_Record_Type=ttk.Combobox(Remove_DNS_Record_Window,values=["A","AAAA","CName"])
-            Set_Record_Type.grid(row=2,column=0)
+            Set_Record_Type.grid(row=2,column=1)
             Exit=ttk.Button(Remove_DNS_Record_Window, text="Exit", command=DNS_Setup_Exit, style='Red.TButton')
             Exit.grid(row=6,column=0,padx=20)
             read_input=ttk.Button(Remove_DNS_Record_Window, text="Finish", command=DNS_Finish_Button, style='Green.TButton')
@@ -392,6 +408,10 @@ def DNS_Setup_click():
 
         def Add_Zone_Button_Click():
             def Add_Reverse_Zone_input_Click():
+                Add_Reverse_Zone_input_Start=threading.Thread(target=Add_Reverse_Zone_input_thread)
+                Add_Reverse_Zone_input_Start.start()
+                Add_Reverse_Zone_input.config(text="Please Wait")
+            def Add_Reverse_Zone_input_thread():
                 NetworkID=NetworkID_Entry.get()
                 tmp=NetworkID.split(".")
                 zonefile=""
@@ -403,6 +423,8 @@ def DNS_Setup_click():
                 command="Add-DnsServerPrimaryZone -NetworkID "+NetworkID+" -ZoneFile "+zonefile
                 powershell(command)
                 Add_Zone_Window.destroy()
+            def Exit_Window():
+                Add_Zone_Window.destroy()
             Add_Zone_Window=tk.Toplevel(Reverse_Lookup_Zone_Window)
             Add_Zone_Window.title("Add Zone") 
             Add_Zone_Window.geometry("320x200")
@@ -410,11 +432,18 @@ def DNS_Setup_click():
             NetworkID_Label.grid(row=0,column=0)
             NetworkID_Entry=tk.Entry(Add_Zone_Window)
             NetworkID_Entry.grid(row=0,column=1)
+            Exit=ttk.Button(Add_Zone_Window,text="Exit",command=Exit_Window, style='Red.TButton')
+            Exit.grid(row=1,column=0)
             Add_Reverse_Zone_input=ttk.Button(Add_Zone_Window,text="Finish",command=Add_Reverse_Zone_input_Click, style='Green.TButton')
             Add_Reverse_Zone_input.grid(row=1,column=1)
 
         def Remove_Zone_Button_Click():
+
             def Remove_Reverse_Zone_input_Click():
+                Remove_Reverse_Zone_input_Start=threading.Thread(target=Remove_Reverse_Zone_input_thread)
+                Remove_Reverse_Zone_input_Start.start()
+                Add_Reverse_Zone_input.config(text="Please Wait")
+            def Remove_Reverse_Zone_input_thread():
                 NetworkID=NetworkID_Entry.get()
                 tmp=NetworkID.split(".")
                 ID=""
@@ -425,6 +454,8 @@ def DNS_Setup_click():
                 command="Remove-DnsServerZone "+ID+" -Force"
                 powershell(command)
                 Remove_Zone_Window.destroy()
+            def Exit_Window():
+                Remove_Zone_Window.destroy()
             Remove_Zone_Window=tk.Toplevel(Reverse_Lookup_Zone_Window)
             Remove_Zone_Window.title("Remove Zone") 
             Remove_Zone_Window.geometry("320x200")
@@ -432,10 +463,17 @@ def DNS_Setup_click():
             NetworkID_Label.grid(row=0,column=0)
             NetworkID_Entry=tk.Entry(Remove_Zone_Window)
             NetworkID_Entry.grid(row=0,column=1)
+            Exit=ttk.Button(Remove_Zone_Window,text="Exit",command=Exit_Window, style='Red.TButton')
+            Exit.grid(row=1,column=0)
             Add_Reverse_Zone_input=ttk.Button(Remove_Zone_Window,text="Finish",command=Remove_Reverse_Zone_input_Click, style='Green.TButton')
             Add_Reverse_Zone_input.grid(row=1,column=1)
+            
         def Add_PTR_Record_Click():
             def Add_PTR_Record_input_Click():
+                Add_PTR_Record_input_Start=threading.Thread(target=Add_PTR_Record_input_thread)
+                Add_PTR_Record_input_Start.start()
+                Add_PTR_Record_input.config(text="Please Wait")
+            def Add_PTR_Record_input_thread():
                 Name=name_Entry.get()
                 ZoneName=ZoneName_Entry.get()
                 PTRDomainName=PTRDomainName_Entry.get()
@@ -447,6 +485,9 @@ def DNS_Setup_click():
                 ID+="in-addr.arpa"
                 command="Add-DnsServerResourceRecordPtr -Name "+Name+" -ZoneName "+ID+" -PtrDomainName "+PTRDomainName
                 powershell(command)
+                Add_PTR_Record_Window.destroy()
+            def Exit_Window():
+                Add_PTR_Record_Window.destroy()
             Add_PTR_Record_Window=tk.Toplevel(Reverse_Lookup_Zone_Window)
             Add_PTR_Record_Window.title("Add PTR Record") 
             Add_PTR_Record_Window.geometry("320x200")
@@ -462,10 +503,16 @@ def DNS_Setup_click():
             PTRDomainName_Label.grid(row=2,column=0)
             PTRDomainName_Entry=tk.Entry(Add_PTR_Record_Window)
             PTRDomainName_Entry.grid(row=2,column=1)
+            Exit=ttk.Button(Add_PTR_Record_Window,text="Exit",command=Exit_Window, style='Red.TButton')
+            Exit.grid(row=3,column=0)
             Add_PTR_Record_input=ttk.Button(Add_PTR_Record_Window,text="Finish",command=Add_PTR_Record_input_Click, style='Green.TButton')
             Add_PTR_Record_input.grid(row=3,column=1)
         def Remove_PTR_Record_Click():
             def Remove_PTR_Record_input_Click():
+                Remove_PTR_Record_input_Start=threading.Thread(target=Remove_PTR_Record_input_thread)
+                Remove_PTR_Record_input_Start.start()
+                Remove_PTR_Record_input.config(text="Please Wait")
+            def Remove_PTR_Record_input_thread():
                 Name=name_Entry.get()
                 ZoneName=ZoneName_Entry.get()   
                 tmp=ZoneName.split(".")
@@ -476,6 +523,9 @@ def DNS_Setup_click():
                 ID+="in-addr.arpa"
                 command="Remove-DnsServerResourceRecord -ZoneName "+ID+" -RRType PTR -Name "+Name+" -Force"
                 powershell(command)
+                Remove_PTR_Record_Window.destroy()
+            def Exit_Window():
+                Remove_PTR_Record_Window.destroy()
             Remove_PTR_Record_Window=tk.Toplevel(Reverse_Lookup_Zone_Window)
             Remove_PTR_Record_Window.title("Remove PTR Record") 
             Remove_PTR_Record_Window.geometry("320x200")
@@ -487,8 +537,10 @@ def DNS_Setup_click():
             ZoneName_Label.grid(row=1,column=0)
             ZoneName_Entry=tk.Entry(Remove_PTR_Record_Window)
             ZoneName_Entry.grid(row=1,column=1)
+            Exit=ttk.Button(Remove_PTR_Record_Window,text="Exit",command=Exit_Window, style='Red.TButton')
+            Exit.grid(row=2,column=0)
             Remove_PTR_Record_input=ttk.Button(Remove_PTR_Record_Window,text="Finish",command=Remove_PTR_Record_input_Click, style='Green.TButton')
-            Remove_PTR_Record_input.grid(row=3,column=1)         
+            Remove_PTR_Record_input.grid(row=2,column=1)         
         Add_Zone_Button=ttk.Button(Reverse_Lookup_Zone_Window,text="Add Zone",command=Add_Zone_Button_Click, style='Custom.TButton')
         Add_Zone_Button.pack()
         Remove_Zone_Button=ttk.Button(Reverse_Lookup_Zone_Window,text="Remove Zone",command=Remove_Zone_Button_Click, style='Custom.TButton')
@@ -512,6 +564,8 @@ def DNS_Setup_click():
             powershell(command)
             Set_Fowarder_Window.destroy()
             #----</Set DNS Fowarder>----
+        def Exit_Window():
+            Set_Fowarder_Window.destroy()
         Set_Fowarder_Window=tk.Toplevel(DNS_Setup_Window)
         Set_Fowarder_Window.title("Set Fowarder")  
         Set_Fowarder_Window.geometry("320x200")
@@ -519,6 +573,8 @@ def DNS_Setup_click():
         Addresslabel.grid(row=0,column=0)
         AddressEntry=tk.Entry(Set_Fowarder_Window)
         AddressEntry.grid(row=0,column=1)
+        Exit=ttk.Button(Set_Fowarder_Window,text="Exit",command=Exit_Window, style='Red.TButton')
+        Exit.grid(row=1,column=0)
         Fowarder_input=ttk.Button(Set_Fowarder_Window,text="Finish",command=input_click, style='Green.TButton')
         Fowarder_input.grid(row=1,column=1)
         #----</DNS Fowarder>----
@@ -546,10 +602,17 @@ def Setup_iSCSI_Disk_Share_Click():
     iSCSI_Setup_Window.geometry("320x200")
     def Add_VirtualDisk_Click():
         def Add_VDisk_input_Click():
+            Add_VDisk_input_Start=threading.Thread(target=Add_VDisk_input_thread)
+            Add_VDisk_input_Start.start()
+            Add_VDisk_input.config(text="Please Wait")
+        def Add_VDisk_input_thread():
             path=VDisk_PathEntry.get()
             size=VDisk_SizeEntry.get()
             command="New-IscsiVirtualDisk -Path "+path+" -size "+size
             powershell(command)
+            Add_VirtualDisk_Window.destroy()
+        def Exit_Window():
+            Add_VirtualDisk_Window.destroy()
         Add_VirtualDisk_Window=tk.Toplevel(iSCSI_Setup_Window)
         Add_VirtualDisk_Window.title("Add Virtual Disk")
         Add_VirtualDisk_Window.geometry("320x200")
@@ -561,10 +624,16 @@ def Setup_iSCSI_Disk_Share_Click():
         VDisk_SizeLabel.grid(row=1,column=0)
         VDisk_SizeEntry=tk.Entry(Add_VirtualDisk_Window)
         VDisk_SizeEntry.grid(row=1,column=1)
+        Exit=ttk.Button(Add_VirtualDisk_Window,text="Exit",command=Exit_Window, style='Red.TButton')
+        Exit.grid(row=2,column=0)
         Add_VDisk_input=ttk.Button(Add_VirtualDisk_Window,text="Finish",command=Add_VDisk_input_Click, style='Green.TButton')
         Add_VDisk_input.grid(row=2,column=1)
     def Share_VirtualDisk_Click():
         def Share_VDisk_input_Click():
+            Share_VDisk_input_Start=threading.Thread(target=Share_VDisk_input_thread)
+            Share_VDisk_input_Start.start()
+            Share_VDisk_input.config(text="Please Wait")
+        def Share_VDisk_input_thread():
             user=UsernameEntry.get()
             pword=PasswordEntry.get()
             target=TargetnameEntry.get()
@@ -574,9 +643,10 @@ def Setup_iSCSI_Disk_Share_Click():
             command1="Add-IscsiVirtualDiskTargetMapping -TargetName "+target+" -DevicePath "+path
             powershell(command1)
             command2="$User=\""+user+"\";$PWord = ConvertTo-SecureString -String \""+pword+"\" -AsPlainText -Force;$Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $PWord;Set-IscsiServerTarget -TargetName "+target+" -EnableChap $True -Chap $Credential"
-            print(command2)
             powershell(command2)
-
+            Share_VirtualDisk_Window.destroy()
+        def Exit_Window():
+            Share_VirtualDisk_Window.destroy()
         Share_VirtualDisk_Window=tk.Toplevel(iSCSI_Setup_Window)
         Share_VirtualDisk_Window.title("Share Virtual Disk")
         Share_VirtualDisk_Window.geometry("320x200")
@@ -596,6 +666,8 @@ def Setup_iSCSI_Disk_Share_Click():
         PasswordLabel.grid(row=3,column=0)
         PasswordEntry=tk.Entry(Share_VirtualDisk_Window)
         PasswordEntry.grid(row=3,column=1)
+        Exit=ttk.Button(Share_VirtualDisk_Window,text="Exit",command=Exit_Window, style='Red.TButton')
+        Exit.grid(row=4,column=0)
         Share_VDisk_input=ttk.Button(Share_VirtualDisk_Window,text="Finish",command=Share_VDisk_input_Click, style='Green.TButton')
         Share_VDisk_input.grid(row=4,column=1)
     Add_VirtualDisk=ttk.Button(iSCSI_Setup_Window,text="Add VirtualDisk",command=Add_VirtualDisk_Click, style='Custom.TButton')
