@@ -50,9 +50,9 @@ def installing_DHCP():
     powershell("Install-WindowsFeature -Name 'DHCP' –IncludeManagementTools")
     DHCP_complete_thread = threading.Thread(target=Func_DHCP_complete)
     DHCP_complete_thread.start()
+    DHCP_Install.config(text="Finished")  
 
 def Func_DHCP_complete():
-    DHCP_Install.config(text="Finished")  
     time.sleep(3)
     DHCP_Install.config(text="Install DHCP Feature")  
 
@@ -104,7 +104,7 @@ def DHCP_Setup_Click():
         powershell(SetDHCPDNS)
         SetDHCPRouter="Set-DhcpServerv4OptionValue -ScopeId "+ScopeID+" -Router "+Router
         powershell(SetDHCPRouter)
-        DHCP_Setup_Window.destroy()
+        DHCP_Setup_Window.des1troy()
         DHCP_Setup_Window.update()
     
     #-----</Read、Setup and close>-----
@@ -700,7 +700,7 @@ def Setup_iSCSI_Disk_Share_Click():
             powershell(command0)
             command1="Add-IscsiVirtualDiskTargetMapping -TargetName "+target+" -DevicePath "+path
             powershell(command1)
-            command2="$User=\""+user+"\";$PWord = ConvertTo-SecureString -String \""+pword+"\" -AsPlainText -Force;$Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $PWord;Set-IscsiServerTarget -TargetName "+target+" -EnableChap $True -Chap $Credential"
+            command2="$User11=\""+user+"\";$PWord = ConvertTo-SecureString -String \""+pword+"\" -AsPlainText -Force;$Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $PWord;Set-IscsiServerTarget -TargetName "+target+" -EnableChap $True -Chap $Credential"
             powershell(command2)
             Share_VirtualDisk_Window.destroy()
         def Exit_Window():
