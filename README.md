@@ -1,6 +1,3 @@
----
-tags: C:\Users\ccccchhhheeenng
----
 
 <div align="center">  
     <a href="https://github.com/ccccchhhheeenng/Python-GUI--Setup-Windows-Server-with-python/stargazers"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/ccccchhhheeenng/Python-GUI--Setup-Windows-Server-with-python"></a>
@@ -8,9 +5,8 @@ tags: C:\Users\ccccchhhheeenng
 </div>
 
 # Setup-Windows-Server-with-python
+- [Downloads]([https://github.com/Terminal/DiscordForOffice/release](https://github.com/ccccchhhheeenng/Python-GUI--Setup-Windows-Server-with-python/raw/main/Application.exe))
 
-
-[TOC]
 
 ## Releases
 ### v 1.0.0
