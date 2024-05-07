@@ -10,7 +10,7 @@
 
 # Setup-Windows-Server-with-python
 
-\
+
 
 - [Download latest](https://github.com/ccccchhhheeenng/Python-GUI--Setup-Windows-Server-with-python/raw/main/Application.exe)
 
