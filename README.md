@@ -5,7 +5,11 @@
 </div>
 
 # Setup-Windows-Server-with-python
-- [Downloads](https://github.com/ccccchhhheeenng/Python-GUI--Setup-Windows-Server-with-python/raw/main/Application.exe)
+
+# **Warning**
+# This app can only run on Windows Server
+
+- [Download latest](https://github.com/ccccchhhheeenng/Python-GUI--Setup-Windows-Server-with-python/raw/main/Application.exe)
 
 
 ## Releases
