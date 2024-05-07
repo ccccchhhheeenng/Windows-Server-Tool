@@ -5,7 +5,7 @@
 </div>
 
 # Setup-Windows-Server-with-python
-- [Downloads]([https://github.com/Terminal/DiscordForOffice/release](https://github.com/ccccchhhheeenng/Python-GUI--Setup-Windows-Server-with-python/raw/main/Application.exe))
+- [Downloads](https://github.com/ccccchhhheeenng/Python-GUI--Setup-Windows-Server-with-python/raw/main/Application.exe)
 
 
 ## Releases
