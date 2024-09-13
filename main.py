@@ -36,24 +36,32 @@ style.configure('Custom.TButton', font=('Helvetica', 12), foreground='blue', pad
 style.configure('Red.TButton', font=('Helvetica', 12), foreground='red', padding=5)
 style.configure('Green.TButton', font=('Helvetica', 12), foreground='green', padding=5)
 
+lock_interface=False
+
 #powershell
 def powershell(command):
+    global lock_interface
+    lock_interface=True
     subprocess.run(["powershell.exe", command])
+    lock_interface=False
 
 #-----<Interface>-----
 def update_interface():
-    for widget in root.winfo_children():
-        widget.destroy()
-    if len(current_interface)==0:
-        setup_main_interface()
-    if "DHCP" in current_interface:
-        setup_DHCP_interface()
-    if "DNS" in current_interface:
-        setup_DNS_interface()
-    if "RemoveDHCP" in current_interface:
-        Remove_DHCP_Scope_interface()
-    if "iSCSI" in current_interface:
-        Setup_iSCSI_Disk_Share_interface()
+    if lock_interface==True:
+        current_interface.pop()
+    else:
+        for widget in root.winfo_children():
+            widget.destroy()
+        if len(current_interface)==0:
+            setup_main_interface()
+        if "DHCP" in current_interface:
+            setup_DHCP_interface()
+        if "DNS" in current_interface:
+            setup_DNS_interface()
+        if "RemoveDHCP" in current_interface:
+            Remove_DHCP_Scope_interface()
+        if "iSCSI" in current_interface:
+            Setup_iSCSI_Disk_Share_interface()
 def back():
     current_interface.pop()
     update_interface()
@@ -137,11 +145,15 @@ def setup_main_interface():
         powershell("Install-WindowsFeature -Name 'DHCP' –IncludeManagementTools")
         DHCP_complete_thread = threading.Thread(target=Func_DHCP_complete)
         DHCP_complete_thread.start()
-        DHCP_Install.config(text="Finished")  
+        DHCP_Install.config(text="Finished") 
 
     def Func_DHCP_complete():
+        
         time.sleep(3)
-        DHCP_Install.config(text="Install DHCP Feature")  
+        try:
+            DHCP_Install.config(text="Install DHCP Feature")  
+        except:
+            pass
     #-----</DHCP_Install>-----
         
     #-----<DHCP_Uninstall>-----
@@ -158,7 +170,10 @@ def setup_main_interface():
     def Func_UnDHCP_complete():
         DHCP_Uninstall.config(text="Finished")  
         time.sleep(3)
-        DHCP_Uninstall.config(text="Uninstall DHCP Feature")  
+        try:
+            DHCP_Uninstall.config(text="Uninstall DHCP Feature")  
+        except:
+            pass
     #-----</DHCP_Uninstall>-----
     def DNS_Install_Click():
         DNS_install_thread = threading.Thread(target=installing_DNS)
