@@ -43,6 +43,7 @@ lock_interface=False
 def powershell(command):
     global lock_interface
     lock_interface=True
+    print(command)
     subprocess.run(["powershell.exe", command])
     lock_interface=False
 
@@ -740,7 +741,7 @@ def Setup_iSCSI_Disk_Share_interface():
             powershell(command0)
             command1="Add-IscsiVirtualDiskTargetMapping -TargetName "+target+" -DevicePath "+path
             powershell(command1)
-            command2="$User11=\""+user+"\";$PWord = ConvertTo-SecureString -String \""+pword+"\" -AsPlainText -Force;$Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $PWord;Set-IscsiServerTarget -TargetName "+target+" -EnableChap $True -Chap $Credential"
+            command2="$User=\""+user+"\";$PWord = ConvertTo-SecureString -String \""+pword+"\" -AsPlainText -Force;$Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $PWord;Set-IscsiServerTarget -TargetName "+target+" -EnableChap $True -Chap $Credential"
             powershell(command2)
             back()
         TargetnameLabel=tk.Label(root,text="Target Name")
