@@ -30,10 +30,11 @@ def update_interface():
         setup_DNS_interface()
     if "RemoveDHCP" in current_interface:
         Remove_DHCP_Scope_interface()
-#---------------------
 def back():
     current_interface.pop()
     update_interface()
+#---------------------
+
 def DHCP_Setup_Click():
     current_interface.append("DHCP")
     update_interface()
@@ -43,6 +44,17 @@ def DNS_Setup_click():
 def Remove_DHCP_Scope_Click():
     current_interface.append("RemoveDHCP")
     update_interface()
+#-----
+def Foward_Lookup_Zone_Click():
+    current_interface.append("Foward_Lookup_Zone")
+    update_interface()
+def Reverse_Lookup_Zone_Click():
+    current_interface.append("Reverse_Lookup_Zone")
+    update_interface()
+def Set_Fowarder_Click():
+    current_interface.append("Set_Fowarder")
+    update_interface()
+#-----
 def Add_DNS_Primary_Zone_Click():
     current_interface.append("Add_DNS_Primary_Zone")
     update_interface()
@@ -55,6 +67,20 @@ def Remove_DNS_Primary_Zone_Click():
 def Remove_DNS_Primary_Record_Click():
     current_interface.append("Remove_DNS_Primary_Record")
     update_interface()
+    
+def Add_DNS_Reverse_Zone_Click():
+    current_interface.append("Add_DNS_Reverse_Zone")
+    update_interface()
+def Remove_DNS_Reverse_Zone_Click():
+    current_interface.append("Remove_DNS_Reverse_Zone")
+    update_interface()
+def Add_DNS_PTR_Record_Click():
+    current_interface.append("Add_DNS_PTR_Record")
+    update_interface()
+def Remove_DNS_PTR_Record_Click():
+    current_interface.append("Remove_DNS_PTR_Record")
+    update_interface()
+#-----
 
 #-----</Interface>-----
 
@@ -167,8 +193,8 @@ def setup_DHCP_interface():
     Routerlabel.grid(row=5, column=0)
     Routerentry = tk.Entry(root)
     Routerentry.grid(row=5, column=1)
-    Exit = ttk.Button(root, text="Exit", command=back, style='Red.TButton')
-    Exit.grid(row=6, column=0, padx=20)
+    Back = ttk.Button(root, text="Back", command=back, style='Red.TButton')
+    Back.grid(row=6, column=0, padx=20)
     read_input=ttk.Button(root, text="Finish", command=DHCP_Finish_Button, style='Green.TButton')
     read_input.grid(row=6,column=1)
 #-----</DHCP Interface>-----
@@ -189,8 +215,8 @@ def Remove_DHCP_Scope_interface():
     ScopeIDlabel.grid(row=0, column=0)
     ScopeIDentry = tk.Entry(root)
     ScopeIDentry.grid(row=0, column=1)
-    Exit=ttk.Button(root, text="Exit", command=back, style='Red.TButton')
-    Exit.grid(row=6,column=0,padx=20)
+    Back=ttk.Button(root, text="Back", command=back, style='Red.TButton')
+    Back.grid(row=6,column=0,padx=20)
     read_input=ttk.Button(root, text="Finish", command=DHCP_Finish_Button, style='Green.TButton')
     read_input.grid(row=6,column=1) 
 def setup_DNS_interface():
@@ -210,8 +236,8 @@ def setup_DNS_interface():
             ZoneNamelabel.grid(row=0,column=0)
             ZoneNameEntry=tk.Entry(root)
             ZoneNameEntry.grid(row=0,column=1)
-            Exit=ttk.Button(root,text="Exit",command=back, style='Red.TButton')
-            Exit.grid(row=1,column=0,padx=20)
+            Back=ttk.Button(root,text="Back",command=back, style='Red.TButton')
+            Back.grid(row=1,column=0,padx=20)
             Add_Primart_Zone_input=ttk.Button(root,text="Finish",command=Add_Primary_Zone_Click, style='Green.TButton')
             Add_Primart_Zone_input.grid(row=1,column=1)
         elif "Add_DNS_Primary_Record" in current_interface:
@@ -239,8 +265,8 @@ def setup_DNS_interface():
                     IPv4Address_Label.grid(row=1,column=0)
                     IPv4Address_Entry=tk.Entry(root)
                     IPv4Address_Entry.grid(row=1,column=1)
-                    Exit=ttk.Button(root,text="Back",command=update_interface, style='Red.TButton')
-                    Exit.grid(row=2,column=0,padx=20)
+                    Back=ttk.Button(root,text="Back",command=update_interface, style='Red.TButton')
+                    Back.grid(row=2,column=0,padx=20)
                     A_input=ttk.Button(root,text="Finish",command=A_input_Click, style='Green.TButton')
                     A_input.grid(row=2,column=1)
                 elif tmp=="AAAA":
@@ -263,8 +289,8 @@ def setup_DNS_interface():
                     IPv6Address_Label.grid(row=1,column=0)
                     IPv6Address_Entry=tk.Entry(root)
                     IPv6Address_Entry.grid(row=1,column=1)
-                    Exit=ttk.Button(root,text="Back",command=update_interface, style='Red.TButton')
-                    Exit.grid(row=2,column=0,padx=20)
+                    Back=ttk.Button(root,text="Back",command=update_interface, style='Red.TButton')
+                    Back.grid(row=2,column=0,padx=20)
                     AAAA_input=ttk.Button(root,text="Finish",command=AAAA_input_Click, style='Green.TButton')
                     AAAA_input.grid(row=2,column=1)
                 else:
@@ -287,8 +313,8 @@ def setup_DNS_interface():
                     HostNameAlias_Label.grid(row=1,column=0)
                     HostNameAlias_Entry=tk.Entry(root)
                     HostNameAlias_Entry.grid(row=1,column=1)
-                    Exit=ttk.Button(root,text="Back",command=update_interface, style='Red.TButton')
-                    Exit.grid(row=2,column=0,padx=20)
+                    Back=ttk.Button(root,text="Back",command=update_interface, style='Red.TButton')
+                    Back.grid(row=2,column=0,padx=20)
                     CName_input=ttk.Button(root,text="Finish",command=CName_input_Click, style='Green.TButton')
                     CName_input.grid(row=2,column=1)
             Set_Zone_Label=tk.Label(root,text="Set Zone:")
@@ -300,8 +326,8 @@ def setup_DNS_interface():
             Set_Record_Type_Label.grid(row=1, column=0)
             Set_Record_Type=ttk.Combobox(root,values=["A","AAAA","CName"])
             Set_Record_Type.grid(row=1, column=1)
-            Exit=ttk.Button(root,text="Exit",command=back, style='Red.TButton')
-            Exit.grid(row=2,column=0,padx=20)
+            Back=ttk.Button(root,text="Back",command=back, style='Red.TButton')
+            Back.grid(row=2,column=0,padx=20)
             DNS_Record_input=ttk.Button(root,text="Next",command=DNS_Record_input_Click, style='Green.TButton')
             DNS_Record_input.grid(row=2,column=1)
         elif "Remove_DNS_Primary_Zone" in current_interface:
@@ -318,8 +344,8 @@ def setup_DNS_interface():
             ZoneNamelabel.grid(row=0, column=0)
             ZoneNameentry = tk.Entry(root)
             ZoneNameentry.grid(row=0, column=1)
-            Exit=ttk.Button(root, text="Exit", command=back, style='Red.TButton')
-            Exit.grid(row=6,column=0,padx=20)
+            Back=ttk.Button(root, text="Back", command=back, style='Red.TButton')
+            Back.grid(row=6,column=0,padx=20)
             read_input=ttk.Button(root, text="Finish", command=DNS_Finish_Button, style='Green.TButton')
             read_input.grid(row=6,column=1)  
         elif "Remove_DNS_Primary_Record" in current_interface:
@@ -346,8 +372,8 @@ def setup_DNS_interface():
             Set_Record_Type_label.grid(row=2,column=0)
             Set_Record_Type=ttk.Combobox(root,values=["A","AAAA","CName"])
             Set_Record_Type.grid(row=2,column=1)
-            Exit=ttk.Button(root, text="Exit", command=back, style='Red.TButton')
-            Exit.grid(row=6,column=0,padx=20)
+            Back=ttk.Button(root, text="Back", command=back, style='Red.TButton')
+            Back.grid(row=6,column=0,padx=20)
             read_input=ttk.Button(root, text="Finish", command=DNS_Finish_Button, style='Green.TButton')
             read_input.grid(row=6,column=1)    
         else:
@@ -359,20 +385,159 @@ def setup_DNS_interface():
             Remove_DNS_Zone_Button.pack()
             Remove_DNS_Record_Button=ttk.Button(root,text="Remove DNS Recoed",command=Remove_DNS_Primary_Record_Click, style='Custom.TButton')
             Remove_DNS_Record_Button.pack()
-            Exit=ttk.Button(root,text="Back",command=back, style='Red.TButton')
-            Exit.pack() 
+            Back=ttk.Button(root,text="Back",command=back, style='Red.TButton')
+            Back.pack() 
+    elif "Reverse_Lookup_Zone" in current_interface:
+        if "Add_DNS_Reverse_Zone" in current_interface:
+            def Add_Reverse_Zone_input_Click():
+                Add_Reverse_Zone_input_Start=threading.Thread(target=Add_Reverse_Zone_input_thread)
+                Add_Reverse_Zone_input_Start.start()
+                Add_Reverse_Zone_input.config(text="Please Wait")
+            def Add_Reverse_Zone_input_thread():
+                NetworkID=NetworkID_Entry.get()
+                tmp=NetworkID.split(".")
+                zonefile=""
+                for i in range(3):
+                    zonefile+=tmp[2-i]
+                    zonefile+="."
+                NetworkID=NetworkID+"/24"
+                zonefile+="in-addr.arpa.dns"
+                command="Add-DnsServerPrimaryZone -NetworkID "+NetworkID+" -ZoneFile "+zonefile
+                powershell(command)
+                back()
+            NetworkID_Label=tk.Label(root,text="NetworkID:")
+            NetworkID_Label.grid(row=0,column=0)
+            NetworkID_Entry=tk.Entry(root)
+            NetworkID_Entry.grid(row=0,column=1)
+            Exit=ttk.Button(root,text="Exit",command=back, style='Red.TButton')
+            Exit.grid(row=1,column=0,padx=20)
+            Add_Reverse_Zone_input=ttk.Button(root,text="Finish",command=Add_Reverse_Zone_input_Click, style='Green.TButton')
+            Add_Reverse_Zone_input.grid(row=1,column=1)
+        elif "Remove_DNS_Reverse_Zone" in current_interface:
+            def Remove_Reverse_Zone_input_Click():
+                Remove_Reverse_Zone_input_Start=threading.Thread(target=Remove_Reverse_Zone_input_thread)
+                Remove_Reverse_Zone_input_Start.start()
+                Add_Reverse_Zone_input.config(text="Please Wait")
+            def Remove_Reverse_Zone_input_thread():
+                NetworkID=NetworkID_Entry.get()
+                tmp=NetworkID.split(".")
+                ID=""
+                for i in range(3):
+                    ID+=tmp[2-i]
+                    ID+="."
+                ID+="in-addr.arpa"
+                command="Remove-DnsServerZone "+ID+" -Force"
+                powershell(command)
+                back()
+            NetworkID_Label=tk.Label(root,text="NetworkID:")
+            NetworkID_Label.grid(row=0,column=0)
+            NetworkID_Entry=tk.Entry(root)
+            NetworkID_Entry.grid(row=0,column=1)
+            Exit=ttk.Button(root,text="Exit",command=back, style='Red.TButton')
+            Exit.grid(row=1,column=0,padx=20)
+            Add_Reverse_Zone_input=ttk.Button(root,text="Finish",command=Remove_Reverse_Zone_input_Click, style='Green.TButton')
+            Add_Reverse_Zone_input.grid(row=1,column=1)
+        elif "Add_DNS_PTR_Record" in current_interface:
+            def Add_PTR_Record_input_Click():
+                Add_PTR_Record_input_Start=threading.Thread(target=Add_PTR_Record_input_thread)
+                Add_PTR_Record_input_Start.start()
+                Add_PTR_Record_input.config(text="Please Wait")
+            def Add_PTR_Record_input_thread():
+                Name=name_Entry.get()
+                ZoneName=ZoneName_Entry.get()
+                PTRDomainName=PTRDomainName_Entry.get()
+                tmp=ZoneName.split(".")
+                ID=""
+                for i in range(3):
+                    ID+=tmp[2-i]
+                    ID+="."
+                ID+="in-addr.arpa"
+                command="Add-DnsServerResourceRecordPtr -Name "+Name+" -ZoneName "+ID+" -PtrDomainName "+PTRDomainName
+                powershell(command)
+                back()
+            Name_Label=tk.Label(root,text="Name:")
+            Name_Label.grid(row=0,column=0)
+            name_Entry=tk.Entry(root)
+            name_Entry.grid(row=0,column=1)
+            ZoneName_ID_Label=tk.Label(root,text="ZoneName(ID):")
+            ZoneName_ID_Label.grid(row=1,column=0)
+            ZoneName_Entry=tk.Entry(root)
+            ZoneName_Entry.grid(row=1,column=1)
+            PTRDomainName_Label=tk.Label(root,text="PTRDomainName:")
+            PTRDomainName_Label.grid(row=2,column=0)
+            PTRDomainName_Entry=tk.Entry(root)
+            PTRDomainName_Entry.grid(row=2,column=1)
+            Exit=ttk.Button(root,text="Exit",command=back, style='Red.TButton')
+            Exit.grid(row=3,column=0,padx=20)
+            Add_PTR_Record_input=ttk.Button(root,text="Finish",command=Add_PTR_Record_input_Click, style='Green.TButton')
+            Add_PTR_Record_input.grid(row=3,column=1)
+        elif "Remove_DNS_PTR_Record" in current_interface:
+            def Remove_PTR_Record_input_Click():
+                Remove_PTR_Record_input_Start=threading.Thread(target=Remove_PTR_Record_input_thread)
+                Remove_PTR_Record_input_Start.start()
+                Remove_PTR_Record_input.config(text="Please Wait")
+            def Remove_PTR_Record_input_thread():
+                Name=name_Entry.get()
+                ZoneName=ZoneName_Entry.get()   
+                tmp=ZoneName.split(".")
+                ID=""
+                for i in range(3):
+                    ID+=tmp[2-i]
+                    ID+="."
+                ID+="in-addr.arpa"
+                command="Remove-DnsServerResourceRecord -ZoneName "+ID+" -RRType PTR -Name "+Name+" -Force"
+                powershell(command)
+                back()
+            Name_Label=tk.Label(root,text="Name:")
+            Name_Label.grid(row=0,column=0)
+            name_Entry=tk.Entry(root)
+            name_Entry.grid(row=0,column=1)
+            ZoneName_Label=tk.Label(root,text="ZoneName(ID):")
+            ZoneName_Label.grid(row=1,column=0)
+            ZoneName_Entry=tk.Entry(root)
+            ZoneName_Entry.grid(row=1,column=1)
+            Exit=ttk.Button(root,text="Exit",command=back, style='Red.TButton')
+            Exit.grid(row=2,column=0,padx=20)
+            Remove_PTR_Record_input=ttk.Button(root,text="Finish",command=Remove_PTR_Record_input_Click, style='Green.TButton')
+            Remove_PTR_Record_input.grid(row=2,column=1)
+        else:
+            Add_Zone_Button=ttk.Button(root,text="Add Zone",command=Add_DNS_Reverse_Zone_Click, style='Custom.TButton')
+            Add_Zone_Button.pack()
+            Remove_Zone_Button=ttk.Button(root,text="Remove Zone",command=Remove_DNS_Reverse_Zone_Click, style='Custom.TButton')
+            Remove_Zone_Button.pack()
+            Add_PTR_Record_Button=ttk.Button(root,text="Add PTR Record",command=Add_DNS_PTR_Record_Click, style='Custom.TButton')
+            Add_PTR_Record_Button.pack()
+            Remove_PTR_Record_Button=ttk.Button(root,text="Remove PTR Record",command=Remove_DNS_PTR_Record_Click, style='Custom.TButton')
+            Remove_PTR_Record_Button.pack()
+            Back=ttk.Button(root,text="Back",command=back, style='Red.TButton')
+            Back.pack()
+    elif "Set_Fowarder" in current_interface:
+        def input_click():
+            DNS_install_thread = threading.Thread(target=Setting_Fowarder)
+            DNS_install_thread.start()
+            Fowarder_input.config(text="Please Wait")
+        def Setting_Fowarder():
+            Address=AddressEntry.get()
+            command="Set-DnsServerForwarder -IPAddress "+Address
+            powershell(command)
+            back()
+        Addresslabel=tk.Label(root,text="IPAddress")
+        Addresslabel.grid(row=0,column=0)
+        AddressEntry=tk.Entry(root)
+        AddressEntry.grid(row=0,column=1)
+        Back=ttk.Button(root,text="Back",command=back, style='Red.TButton')
+        Back.grid(row=1,column=0,padx=20)
+        Fowarder_input=ttk.Button(root,text="Finish",command=input_click, style='Green.TButton')
+        Fowarder_input.grid(row=1,column=1)
     else:
-        def Foward_Lookup_Zone_Click():
-            current_interface.append("Foward_Lookup_Zone")
-            update_interface()
         Foward_Lookup_Zone=ttk.Button(root,text="Foward Look Zone Settings",command=Foward_Lookup_Zone_Click, style='Custom.TButton')
         Foward_Lookup_Zone.pack()
-        Exit=ttk.Button(root,text="Back",command=back, style='Red.TButton')
-        Exit.pack() 
-        # Reverse_Lookup_Zone=ttk.Button(root,text="Reverse Look Zone Settings",command=Reverse_Lookup_Zone_Click, style='Custom.TButton')
-        # Reverse_Lookup_Zone.pack()
-        # Set_Fowarder=ttk.Button(root,text="Set Fowarder",command=Set_Fowarder_Click, style='Custom.TButton')
-        # Set_Fowarder.pack()
+        Reverse_Lookup_Zone=ttk.Button(root,text="Reverse Look Zone Settings",command=Reverse_Lookup_Zone_Click, style='Custom.TButton')
+        Reverse_Lookup_Zone.pack()
+        Set_Fowarder=ttk.Button(root,text="Set Fowarder",command=Set_Fowarder_Click, style='Custom.TButton')
+        Set_Fowarder.pack()
+        Back=ttk.Button(root,text="Back",command=back, style='Red.TButton')
+        Back.pack() 
 
 
 setup_main_interface()
