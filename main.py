@@ -27,7 +27,7 @@ from tkinter import ttk
 
 
 root = tk.Tk()
-root.title('Windows Server Setup')
+root.title('Windows Server Tool')
 root.geometry('400x400')
 current_interface = list()
 #Style
@@ -39,6 +39,7 @@ style.configure('Green.TButton', font=('Helvetica', 12), foreground='green', pad
 lock_interface=False
 
 #powershell
+
 def powershell(command):
     global lock_interface
     lock_interface=True
@@ -63,11 +64,17 @@ def update_interface():
         if "iSCSI" in current_interface:
             Setup_iSCSI_Disk_Share_interface()
 def back():
-    current_interface.pop()
-    update_interface()
+    if lock_interface==True:
+        pass
+    else:
+        current_interface.pop()
+        update_interface()
 def Restart():
-    command="shutdown -r -t 0"
-    powershell(command)
+    if  lock_interface==True:
+        pass
+    else:
+        command="shutdown -r -t 0"
+        powershell(command)
 #---------------------
 
 def DHCP_Setup_Click():
@@ -137,9 +144,12 @@ def setup_main_interface():
 
     #-----<DHCP_Install>-----
     def DHCP_Install_Click():
-        DHCP_install_thread = threading.Thread(target=installing_DHCP)
-        DHCP_install_thread.start()
-        DHCP_Install.config(text='Installing')
+        if lock_interface==True:
+            pass
+        else:
+            DHCP_install_thread = threading.Thread(target=installing_DHCP)
+            DHCP_install_thread.start()
+            DHCP_Install.config(text='Installing')
 
     def installing_DHCP():
         powershell("Install-WindowsFeature -Name 'DHCP' –IncludeManagementTools")
@@ -158,9 +168,12 @@ def setup_main_interface():
         
     #-----<DHCP_Uninstall>-----
     def DHCP_Uninstall_Click():
-        DHCP_Uninstall_thread = threading.Thread(target=Uninstalling_DHCP)
-        DHCP_Uninstall_thread.start()
-        DHCP_Uninstall.config(text='Uninstalling')
+        if lock_interface==True:
+            pass
+        else:
+            DHCP_Uninstall_thread = threading.Thread(target=Uninstalling_DHCP)
+            DHCP_Uninstall_thread.start()
+            DHCP_Uninstall.config(text='Uninstalling')
 
     def Uninstalling_DHCP():
         powershell("Uninstall-WindowsFeature -Name 'DHCP' –IncludeManagementTools")
@@ -176,9 +189,12 @@ def setup_main_interface():
             pass
     #-----</DHCP_Uninstall>-----
     def DNS_Install_Click():
-        DNS_install_thread = threading.Thread(target=installing_DNS)
-        DNS_install_thread.start()
-        DNS_Install.config(text='Installing')
+        if lock_interface==True:
+            pass
+        else:
+            DNS_install_thread = threading.Thread(target=installing_DNS)
+            DNS_install_thread.start()
+            DNS_Install.config(text='Installing')
 
     def installing_DNS():
         powershell("Install-WindowsFeature -Name 'DNS' –IncludeManagementTools")
@@ -196,9 +212,12 @@ def setup_main_interface():
         #-----<DNS_Uninstall>
 
     def DNS_Uninstall_Click():
-        DNS_Uninstall_thread = threading.Thread(target=Uninstalling_DNS)
-        DNS_Uninstall_thread.start()
-        DNS_Uninstall.config(text='Uninstalling')
+        if lock_interface==True:
+            pass
+        else:
+            DNS_Uninstall_thread = threading.Thread(target=Uninstalling_DNS)
+            DNS_Uninstall_thread.start()
+            DNS_Uninstall.config(text='Uninstalling')
 
     def Uninstalling_DNS():
         powershell("Uninstall-WindowsFeature -Name 'DNS' –IncludeManagementTools")
@@ -212,9 +231,12 @@ def setup_main_interface():
         DNS_Uninstall.config(text="Uninstall DNS Feature") 
 
     def iSCSI_target_Uninstall_click():
-        iSCSI_Uninstall_thread = threading.Thread(target=Uninstalling_iSCSI)
-        iSCSI_Uninstall_thread.start()
-        Uninstall_iSCSITarget.config(text='Uninstalling')
+        if lock_interface==True:
+            pass
+        else:
+            iSCSI_Uninstall_thread = threading.Thread(target=Uninstalling_iSCSI)
+            iSCSI_Uninstall_thread.start()
+            Uninstall_iSCSITarget.config(text='Uninstalling')
 
     def Uninstalling_iSCSI():
         powershell("Uninstall-WindowsFeature -Name FS-iSCSITarget-Server")
@@ -228,9 +250,12 @@ def setup_main_interface():
         Uninstall_iSCSITarget.config(text="Uninstall iSCSI Feature") 
 
     def iSCSI_target_install_click():
-        iSCSI_install_thread = threading.Thread(target=installing_iSCSI)
-        iSCSI_install_thread.start()
-        Install_iSCSITarget.config(text='Installing')
+        if lock_interface==True:
+            pass
+        else:
+            iSCSI_install_thread = threading.Thread(target=installing_iSCSI)
+            iSCSI_install_thread.start()
+            Install_iSCSITarget.config(text='Installing')
 
     def installing_iSCSI():
         powershell("Install-WindowsFeature -Name FS-iSCSITarget-Server")
@@ -376,6 +401,7 @@ def setup_DNS_interface():
         elif "Add_DNS_Primary_Record" in current_interface:
             def DNS_Record_input_Click():
                 tmp=Set_Record_Type.get()
+                zone=Set_Zone_Entry.get()
                 for widget in root.winfo_children():
                     widget.destroy()
                 if tmp=="A":
@@ -384,7 +410,6 @@ def setup_DNS_interface():
                         DNS_install_thread.start()
                         A_input.config(text="Please Wait")
                     def installing_DNS_A():
-                        zone=Set_Zone_Entry.get()
                         name=Name_Entry.get()
                         IPv4Address=IPv4Address_Entry.get()
                         command="Add-DnsServerResourceRecordA -Name "+name+" -ZoneName "+zone+" -IPv4Address "+IPv4Address
@@ -408,7 +433,6 @@ def setup_DNS_interface():
                         DNS_install_thread.start()
                         AAAA_input.config(text="Please Wait")
                     def installing_DNS_AAAA():
-                        zone=Set_Zone_Entry.get()
                         name=Name_Entry.get()
                         IPv6Address=IPv6Address_Entry.get()
                         command="Add-DnsServerResourceRecordAAAA -Name "+name+" -ZoneName "+zone+" -IPv6Address "+IPv6Address
@@ -432,7 +456,6 @@ def setup_DNS_interface():
                         DNS_install_thread.start()
                         CName_input.config(text="Please Wait")
                     def installing_DNS_CName():
-                        zone=Set_Zone_Entry.get()
                         name=Name_Entry.get()
                         HostNameAlias=HostNameAlias_Entry.get()
                         command="Add-DnsServerResourceRecordCName -Name "+name+" -ZoneName "+zone+" -HostNameAlias "+HostNameAlias
