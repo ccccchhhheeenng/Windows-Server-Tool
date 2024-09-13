@@ -30,9 +30,14 @@ def update_interface():
         setup_DNS_interface()
     if "RemoveDHCP" in current_interface:
         Remove_DHCP_Scope_interface()
+    if "iSCSI" in current_interface:
+        Setup_iSCSI_Disk_Share_interface()
 def back():
     current_interface.pop()
     update_interface()
+def Restart():
+    command="shutdown -r -t 0"
+    powershell(command)
 #---------------------
 
 def DHCP_Setup_Click():
@@ -43,6 +48,9 @@ def DNS_Setup_click():
     update_interface()
 def Remove_DHCP_Scope_Click():
     current_interface.append("RemoveDHCP")
+    update_interface()
+def Setup_iSCSI_Disk_Share_Click():
+    current_interface.append("iSCSI")
     update_interface()
 #-----
 def Foward_Lookup_Zone_Click():
@@ -80,6 +88,14 @@ def Add_DNS_PTR_Record_Click():
 def Remove_DNS_PTR_Record_Click():
     current_interface.append("Remove_DNS_PTR_Record")
     update_interface()
+
+def Add_VirtualDisk_Click():
+    current_interface.append("Add_VirtualDisk")
+    update_interface()
+def Share_VirtualDisk_Click():
+    current_interface.append("Share_VirtualDisk")
+    update_interface()
+
 #-----
 
 #-----</Interface>-----
@@ -122,7 +138,75 @@ def setup_main_interface():
         time.sleep(3)
         DHCP_Uninstall.config(text="Uninstall DHCP Feature")  
     #-----</DHCP_Uninstall>-----
+    def DNS_Install_Click():
+        DNS_install_thread = threading.Thread(target=installing_DNS)
+        DNS_install_thread.start()
+        DNS_Install.config(text='Installing')
+
+    def installing_DNS():
+        powershell("Install-WindowsFeature -Name 'DNS' –IncludeManagementTools")
+        DNS_complete_thread = threading.Thread(target=Func_DNS_complete)
+        DNS_complete_thread.start()
+
+
+    def Func_DNS_complete():
+        DNS_Install.config(text="Finished")  
+        time.sleep(3)
+        DNS_Install.config(text="Install DNS Feature")  
     
+        #-----</DNS_Install>-----
+
+        #-----<DNS_Uninstall>
+
+    def DNS_Uninstall_Click():
+        DNS_Uninstall_thread = threading.Thread(target=Uninstalling_DNS)
+        DNS_Uninstall_thread.start()
+        DNS_Uninstall.config(text='Uninstalling')
+
+    def Uninstalling_DNS():
+        powershell("Uninstall-WindowsFeature -Name 'DNS' –IncludeManagementTools")
+        DNS_complete_thread = threading.Thread(target=Func_UnDNS_complete)
+        DNS_complete_thread.start()
+
+
+    def Func_UnDNS_complete():
+        DNS_Uninstall.config(text="Finished")  
+        time.sleep(3)
+        DNS_Uninstall.config(text="Uninstall DNS Feature") 
+
+    def iSCSI_target_Uninstall_click():
+        iSCSI_Uninstall_thread = threading.Thread(target=Uninstalling_iSCSI)
+        iSCSI_Uninstall_thread.start()
+        Uninstall_iSCSITarget.config(text='Uninstalling')
+
+    def Uninstalling_iSCSI():
+        powershell("Uninstall-WindowsFeature -Name FS-iSCSITarget-Server")
+        iSCSI_complete_thread = threading.Thread(target=Func_UniSCSI_complete)
+        iSCSI_complete_thread.start()
+
+
+    def Func_UniSCSI_complete():
+        Uninstall_iSCSITarget.config(text="Finished")  
+        time.sleep(3)
+        Uninstall_iSCSITarget.config(text="Uninstall iSCSI Feature") 
+
+    def iSCSI_target_install_click():
+        iSCSI_install_thread = threading.Thread(target=installing_iSCSI)
+        iSCSI_install_thread.start()
+        Install_iSCSITarget.config(text='Installing')
+
+    def installing_iSCSI():
+        powershell("Install-WindowsFeature -Name FS-iSCSITarget-Server")
+        iSCSI_complete_thread = threading.Thread(target=Func_iSCSI_complete)
+        iSCSI_complete_thread.start()
+
+
+    def Func_iSCSI_complete():
+        Install_iSCSITarget.config(text="Finished")  
+        time.sleep(3)
+        Install_iSCSITarget.config(text="Install iSCSI Feature") 
+
+ 
 #-------</Install tools>-----
 
     #-----<Main Window Buttons>-----
@@ -132,10 +216,22 @@ def setup_main_interface():
     DHCP_Uninstall.pack()
     Setup_DHCP = ttk.Button(root, text="Setup DHCP", command=DHCP_Setup_Click, style='Custom.TButton')
     Setup_DHCP.pack()
+    Remove_DHCP_Scope=ttk.Button(root,text="Remove DHCP Scope",command=Remove_DHCP_Scope_Click, style='Custom.TButton')
+    Remove_DHCP_Scope.pack()   
+    DNS_Install=ttk.Button(root,text="Install DNS Feature",command=DNS_Install_Click, style='Custom.TButton')
+    DNS_Install.pack()
+    DNS_Uninstall=ttk.Button(root,text="Uninstall DNS Feature",command=DNS_Uninstall_Click, style='Custom.TButton')
+    DNS_Uninstall.pack() 
     Setup_DNS=ttk.Button(root,text="Setup DNS",command=DNS_Setup_click, style='Custom.TButton')
     Setup_DNS.pack()
-    Remove_DHCP_Scope=ttk.Button(root,text="Remove DHCP Scope",command=Remove_DHCP_Scope_Click, style='Custom.TButton')
-    Remove_DHCP_Scope.pack()    
+    Install_iSCSITarget=ttk.Button(root,text="Install iSCSI target",command=iSCSI_target_install_click, style='Custom.TButton')
+    Install_iSCSITarget.pack()
+    Uninstall_iSCSITarget=ttk.Button(root,text="Unistall iSCSI target",command=iSCSI_target_Uninstall_click, style='Custom.TButton')
+    Uninstall_iSCSITarget.pack()
+    Setup_iSCSI_Disk_Share=ttk.Button(root,text="Setup iSCSI Disk Share",command=Setup_iSCSI_Disk_Share_Click, style='Custom.TButton')
+    Setup_iSCSI_Disk_Share.pack()
+    Restart_Computer=ttk.Button(root,text="Restart This Computer",command=Restart, style='Red.TButton')
+    Restart_Computer.pack()
     #-----</Main Window Buttons>-----
 #-----</Main Interface>-----
 
@@ -539,6 +635,81 @@ def setup_DNS_interface():
         Back=ttk.Button(root,text="Back",command=back, style='Red.TButton')
         Back.pack() 
 
+def Setup_iSCSI_Disk_Share_interface():
+
+    if "Add_VirtualDisk" in current_interface:
+        def Add_VDisk_input_Click():
+            Add_VDisk_input_Start=threading.Thread(target=Add_VDisk_input_thread)
+            Add_VDisk_input_Start.start()
+            Add_VDisk_input.config(text="Please Wait")
+        def Add_VDisk_input_thread():
+            path=VDisk_PathEntry.get()
+            name=VDisk_NameEntry.get()
+            disk=path+name
+            size=VDisk_SizeEntry.get()
+            command="New-IscsiVirtualDisk -Path "+disk+" -size "+size
+            powershell(command)
+            back()
+        VDisk_PathLabel=tk.Label(root,text="VDisk Path")
+        VDisk_PathLabel.grid(row=0,column=0)
+        VDisk_PathEntry=tk.Entry(root)
+        VDisk_PathEntry.grid(row=0,column=1)
+        VDisk_NameLabel=tk.Label(root,text="VDisk Name(Ex:DiskName.vhdx)")
+        VDisk_NameLabel.grid(row=1,column=0)
+        VDisk_NameEntry=tk.Entry(root)
+        VDisk_NameEntry.grid(row=1,column=1)
+        VDisk_SizeLabel=tk.Label(root,text="VDisk Size(Ex:10GB)")
+        VDisk_SizeLabel.grid(row=2,column=0)
+        VDisk_SizeEntry=tk.Entry(root)
+        VDisk_SizeEntry.grid(row=2,column=1)
+        Exit=ttk.Button(root,text="Exit",command=back, style='Red.TButton')
+        Exit.grid(row=3,column=0,padx=20)
+        Add_VDisk_input=ttk.Button(root,text="Finish",command=Add_VDisk_input_Click, style='Green.TButton')
+        Add_VDisk_input.grid(row=3,column=1)
+    elif "Share_VirtualDisk" in current_interface:
+        def Share_VDisk_input_Click():
+            Share_VDisk_input_Start=threading.Thread(target=Share_VDisk_input_thread)
+            Share_VDisk_input_Start.start()
+            Share_VDisk_input.config(text="Please Wait")
+        def Share_VDisk_input_thread():
+            user=UsernameEntry.get()
+            pword=PasswordEntry.get()
+            target=TargetnameEntry.get()
+            path=DiskPathEntry.get()
+            command0="New-IscsiServerTarget -TargetName "+target+" -InitiatorId \"Iqn:*\""
+            powershell(command0)
+            command1="Add-IscsiVirtualDiskTargetMapping -TargetName "+target+" -DevicePath "+path
+            powershell(command1)
+            command2="$User11=\""+user+"\";$PWord = ConvertTo-SecureString -String \""+pword+"\" -AsPlainText -Force;$Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $PWord;Set-IscsiServerTarget -TargetName "+target+" -EnableChap $True -Chap $Credential"
+            powershell(command2)
+            back()
+        TargetnameLabel=tk.Label(root,text="Target Name")
+        TargetnameLabel.grid(row=0,column=0)
+        TargetnameEntry=tk.Entry(root)
+        TargetnameEntry.grid(row=0,column=1)
+        DiskPathLabel=tk.Label(root,text="Disk Path")
+        DiskPathLabel.grid(row=1,column=0)
+        DiskPathEntry=tk.Entry(root)
+        DiskPathEntry.grid(row=1,column=1)
+        UsernameLabel=tk.Label(root,text="User Name")
+        UsernameLabel.grid(row=2,column=0)
+        UsernameEntry=tk.Entry(root)
+        UsernameEntry.grid(row=2,column=1)
+        PasswordLabel=tk.Label(root,text="Password")
+        PasswordLabel.grid(row=3,column=0)
+        PasswordEntry=tk.Entry(root)
+        PasswordEntry.grid(row=3,column=1)
+        Exit=ttk.Button(root,text="Exit",command=back, style='Red.TButton')
+        Exit.grid(row=4,column=0,padx=20)
+        Share_VDisk_input=ttk.Button(root,text="Finish",command=Share_VDisk_input_Click, style='Green.TButton')
+        Share_VDisk_input.grid(row=4,column=1)
+    else:
+        Add_VirtualDisk_Button=ttk.Button(root,text="Add VirtualDisk",command=Add_VirtualDisk_Click, style='Custom.TButton')
+        Add_VirtualDisk_Button.pack()
+        Share_VirtualDisk=ttk.Button(root,text="Share VirtualDisk by iSCSI",command=Share_VirtualDisk_Click, style='Custom.TButton')
+        Share_VirtualDisk.pack()
+        Back=ttk.Button(root,text="Back",command=back, style='Red.TButton')
+        Back.pack() 
 
 setup_main_interface()
 root.mainloop()
