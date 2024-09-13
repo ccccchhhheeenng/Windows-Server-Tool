@@ -43,6 +43,19 @@ def DNS_Setup_click():
 def Remove_DHCP_Scope_Click():
     current_interface.append("RemoveDHCP")
     update_interface()
+def Add_DNS_Primary_Zone_Click():
+    current_interface.append("Add_DNS_Primary_Zone")
+    update_interface()
+def Add_DNS_Primary_Record_Click():
+    current_interface.append("Add_DNS_Primary_Record")
+    update_interface()
+def Remove_DNS_Primary_Zone_Click():
+    current_interface.append("Remove_DNS_Primary_Zone")
+    update_interface()
+def Remove_DNS_Primary_Record_Click():
+    current_interface.append("Remove_DNS_Primary_Record")
+    update_interface()
+
 #-----</Interface>-----
 
 #-----</Main Interface>-----
@@ -182,22 +195,180 @@ def Remove_DHCP_Scope_interface():
     read_input.grid(row=6,column=1) 
 def setup_DNS_interface():
     if "Foward_Lookup_Zone" in current_interface:
-        def Add_Primary_Button_Click():
-            pass
-        Add_Primary_Zone_Button=ttk.Button(root,text="Add Primary Zone",command=Add_Primary_Button_Click, style='Custom.TButton')
-        Add_Primary_Zone_Button.pack()
-        # Add_DNS_Record_Button=ttk.Button(root,text="Add DNS Record",command=Add_DNS_Record_Click, style='Custom.TButton')
-        # Add_DNS_Record_Button.pack()
-        # Remove_DNS_Zone_Button=ttk.Button(root,text="Remove DNS Zone",command=Remove_DNS_Zone_Click, style='Custom.TButton')
-        # Remove_DNS_Zone_Button.pack()
-        # Remove_DNS_Record_Button=ttk.Button(root,text="Remove DNS Recoed",command=Remove_DNS_Record_Click, style='Custom.TButton')
-        # Remove_DNS_Record_Button.pack()
+        if "Add_DNS_Primary_Zone" in current_interface:
+            def Add_Primary_Zone_Click():
+                DNS_install_thread = threading.Thread(target=Adding_Zone)
+                DNS_install_thread.start()
+                Add_Primart_Zone_input.config(text="Please Wait")
+            def Adding_Zone():
+                ZoneName=ZoneNameEntry.get()
+                ZoneFile=ZoneName+".dns"
+                command="Add-DnsServerPrimaryZone -Name "+ZoneName+" -ZoneFile "+ZoneFile
+                powershell(command)
+                back()
+            ZoneNamelabel=tk.Label(root,text="Zone Name")
+            ZoneNamelabel.grid(row=0,column=0)
+            ZoneNameEntry=tk.Entry(root)
+            ZoneNameEntry.grid(row=0,column=1)
+            Exit=ttk.Button(root,text="Exit",command=back, style='Red.TButton')
+            Exit.grid(row=1,column=0,padx=20)
+            Add_Primart_Zone_input=ttk.Button(root,text="Finish",command=Add_Primary_Zone_Click, style='Green.TButton')
+            Add_Primart_Zone_input.grid(row=1,column=1)
+        elif "Add_DNS_Primary_Record" in current_interface:
+            def DNS_Record_input_Click():
+                tmp=Set_Record_Type.get()
+                for widget in root.winfo_children():
+                    widget.destroy()
+                if tmp=="A":
+                    def A_input_Click():
+                        DNS_install_thread = threading.Thread(target=installing_DNS_A)
+                        DNS_install_thread.start()
+                        A_input.config(text="Please Wait")
+                    def installing_DNS_A():
+                        zone=Set_Zone_Entry.get()
+                        name=Name_Entry.get()
+                        IPv4Address=IPv4Address_Entry.get()
+                        command="Add-DnsServerResourceRecordA -Name "+name+" -ZoneName "+zone+" -IPv4Address "+IPv4Address
+                        powershell(command)
+                        update_interface()
+                    Name_Label=tk.Label(root,text="Name:")
+                    Name_Label.grid(row=0,column=0)
+                    Name_Entry=tk.Entry(root)
+                    Name_Entry.grid(row=0,column=1)
+                    IPv4Address_Label=tk.Label(root,text="IPv4Address:")
+                    IPv4Address_Label.grid(row=1,column=0)
+                    IPv4Address_Entry=tk.Entry(root)
+                    IPv4Address_Entry.grid(row=1,column=1)
+                    Exit=ttk.Button(root,text="Back",command=update_interface, style='Red.TButton')
+                    Exit.grid(row=2,column=0,padx=20)
+                    A_input=ttk.Button(root,text="Finish",command=A_input_Click, style='Green.TButton')
+                    A_input.grid(row=2,column=1)
+                elif tmp=="AAAA":
+                    def AAAA_input_Click():
+                        DNS_install_thread = threading.Thread(target=installing_DNS_AAAA)
+                        DNS_install_thread.start()
+                        AAAA_input.config(text="Please Wait")
+                    def installing_DNS_AAAA():
+                        zone=Set_Zone_Entry.get()
+                        name=Name_Entry.get()
+                        IPv6Address=IPv6Address_Entry.get()
+                        command="Add-DnsServerResourceRecordAAAA -Name "+name+" -ZoneName "+zone+" -IPv6Address "+IPv6Address
+                        powershell(command)
+                        update_interface()
+                    Name_Label=tk.Label(root,text="Name:")
+                    Name_Label.grid(row=0,column=0)
+                    Name_Entry=tk.Entry(root)
+                    Name_Entry.grid(row=0,column=1)
+                    IPv6Address_Label=tk.Label(root,text="IPv6Address:")
+                    IPv6Address_Label.grid(row=1,column=0)
+                    IPv6Address_Entry=tk.Entry(root)
+                    IPv6Address_Entry.grid(row=1,column=1)
+                    Exit=ttk.Button(root,text="Back",command=update_interface, style='Red.TButton')
+                    Exit.grid(row=2,column=0,padx=20)
+                    AAAA_input=ttk.Button(root,text="Finish",command=AAAA_input_Click, style='Green.TButton')
+                    AAAA_input.grid(row=2,column=1)
+                else:
+                    def CName_input_Click():
+                        DNS_install_thread = threading.Thread(target=installing_DNS_CName)
+                        DNS_install_thread.start()
+                        CName_input.config(text="Please Wait")
+                    def installing_DNS_CName():
+                        zone=Set_Zone_Entry.get()
+                        name=Name_Entry.get()
+                        HostNameAlias=HostNameAlias_Entry.get()
+                        command="Add-DnsServerResourceRecordCName -Name "+name+" -ZoneName "+zone+" -HostNameAlias "+HostNameAlias
+                        powershell(command)
+                        update_interface()
+                    Name_Label=tk.Label(root,text="Name:")
+                    Name_Label.grid(row=0,column=0)
+                    Name_Entry=tk.Entry(root)
+                    Name_Entry.grid(row=0,column=1)
+                    HostNameAlias_Label=tk.Label(root,text="HostNameAlias:")
+                    HostNameAlias_Label.grid(row=1,column=0)
+                    HostNameAlias_Entry=tk.Entry(root)
+                    HostNameAlias_Entry.grid(row=1,column=1)
+                    Exit=ttk.Button(root,text="Back",command=update_interface, style='Red.TButton')
+                    Exit.grid(row=2,column=0,padx=20)
+                    CName_input=ttk.Button(root,text="Finish",command=CName_input_Click, style='Green.TButton')
+                    CName_input.grid(row=2,column=1)
+            Set_Zone_Label=tk.Label(root,text="Set Zone:")
+            Set_Zone_Label.grid(row=0,column=0,)
+            Set_Zone_Entry=tk.Entry(root)
+            Set_Zone_Entry.grid(row=0,column=1)
+            #---<!!!!!!!需合併column!!!!!>---
+            Set_Record_Type_Label = ttk.Label(root, text="Record Type:")
+            Set_Record_Type_Label.grid(row=1, column=0)
+            Set_Record_Type=ttk.Combobox(root,values=["A","AAAA","CName"])
+            Set_Record_Type.grid(row=1, column=1)
+            Exit=ttk.Button(root,text="Exit",command=back, style='Red.TButton')
+            Exit.grid(row=2,column=0,padx=20)
+            DNS_Record_input=ttk.Button(root,text="Next",command=DNS_Record_input_Click, style='Green.TButton')
+            DNS_Record_input.grid(row=2,column=1)
+        elif "Remove_DNS_Primary_Zone" in current_interface:
+            def DNS_Finish_Button():
+                DNS_Remove_thread=threading.Thread(target=Remove_Start)
+                DNS_Remove_thread.start()
+                read_input.config(text="Please Wait")
+            def Remove_Start():
+                Zone=ZoneNameentry.get()
+                command="Remove-DnsServerZone -Name "+Zone+" -Force"
+                powershell(command)
+                back()               
+            ZoneNamelabel = tk.Label(root, text='ZoneName:')
+            ZoneNamelabel.grid(row=0, column=0)
+            ZoneNameentry = tk.Entry(root)
+            ZoneNameentry.grid(row=0, column=1)
+            Exit=ttk.Button(root, text="Exit", command=back, style='Red.TButton')
+            Exit.grid(row=6,column=0,padx=20)
+            read_input=ttk.Button(root, text="Finish", command=DNS_Finish_Button, style='Green.TButton')
+            read_input.grid(row=6,column=1)  
+        elif "Remove_DNS_Primary_Record" in current_interface:
+            def DNS_Finish_Button():
+                DNS_Remove_thread=threading.Thread(target=Remove_Start)
+                DNS_Remove_thread.start()
+                read_input.config(text="Please Wait")
+            def Remove_Start():
+                Zone=ZoneNameentry.get()
+                Record=RecordNameentry.get()
+                type=str(Set_Record_Type.get())
+                command="Remove-DnsServerResourceRecord -ZoneName "+Zone+" -Name "+Record+" -RRType "+type+" -Force"
+                powershell(command)
+                back()
+            ZoneNamelabel = tk.Label(root, text='ScopeID:')
+            ZoneNamelabel.grid(row=0, column=0)
+            ZoneNameentry = tk.Entry(root)
+            ZoneNameentry.grid(row=0, column=1)
+            RecordNamelabel = tk.Label(root, text='RecordName:')
+            RecordNamelabel.grid(row=1, column=0)
+            RecordNameentry = tk.Entry(root)
+            RecordNameentry.grid(row=1, column=1)
+            Set_Record_Type_label=tk.Label(root,text="Type")
+            Set_Record_Type_label.grid(row=2,column=0)
+            Set_Record_Type=ttk.Combobox(root,values=["A","AAAA","CName"])
+            Set_Record_Type.grid(row=2,column=1)
+            Exit=ttk.Button(root, text="Exit", command=back, style='Red.TButton')
+            Exit.grid(row=6,column=0,padx=20)
+            read_input=ttk.Button(root, text="Finish", command=DNS_Finish_Button, style='Green.TButton')
+            read_input.grid(row=6,column=1)    
+        else:
+            Add_Primary_Zone_Button=ttk.Button(root,text="Add Primary Zone",command=Add_DNS_Primary_Zone_Click, style='Custom.TButton')
+            Add_Primary_Zone_Button.pack()           
+            Add_DNS_Record_Button=ttk.Button(root,text="Add DNS Record",command=Add_DNS_Primary_Record_Click, style='Custom.TButton')
+            Add_DNS_Record_Button.pack()
+            Remove_DNS_Zone_Button=ttk.Button(root,text="Remove DNS Zone",command=Remove_DNS_Primary_Zone_Click, style='Custom.TButton')
+            Remove_DNS_Zone_Button.pack()
+            Remove_DNS_Record_Button=ttk.Button(root,text="Remove DNS Recoed",command=Remove_DNS_Primary_Record_Click, style='Custom.TButton')
+            Remove_DNS_Record_Button.pack()
+            Exit=ttk.Button(root,text="Back",command=back, style='Red.TButton')
+            Exit.pack() 
     else:
         def Foward_Lookup_Zone_Click():
             current_interface.append("Foward_Lookup_Zone")
             update_interface()
         Foward_Lookup_Zone=ttk.Button(root,text="Foward Look Zone Settings",command=Foward_Lookup_Zone_Click, style='Custom.TButton')
         Foward_Lookup_Zone.pack()
+        Exit=ttk.Button(root,text="Back",command=back, style='Red.TButton')
+        Exit.pack() 
         # Reverse_Lookup_Zone=ttk.Button(root,text="Reverse Look Zone Settings",command=Reverse_Lookup_Zone_Click, style='Custom.TButton')
         # Reverse_Lookup_Zone.pack()
         # Set_Fowarder=ttk.Button(root,text="Set Fowarder",command=Set_Fowarder_Click, style='Custom.TButton')
