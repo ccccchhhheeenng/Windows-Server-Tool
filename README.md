@@ -12,7 +12,7 @@
 
 
 
-- [Download latest](https://raw.githubusercontent.com/ccccchhhheeenng/Windows-Server-Tool/raw/refs/heads//main/Application.exe)
+- [Download latest](https://raw.githubusercontent.com/ccccchhhheeenng/Windows-Server-Tool/raw/refs/heads/main/Application.exe)
 
 
 ## Releases
