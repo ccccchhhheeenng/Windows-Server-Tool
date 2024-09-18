@@ -19,9 +19,9 @@
 ### v 1.0.0
 release at 2024/04/05
 
-<a href="https://github.com/ccccchhhheeenng/Python-GUI--Setup-Windows-Server-with-python/raw/main/Application.exe">Windows Executeable Download</a>
+<a href="https://github.com/ccccchhhheeenng/Windows-Server-Tool/blob/main/Releases/1.0.exe">Windows Executeable Download</a>
 
-<a href="https://github.com/ccccchhhheeenng/Python-GUI--Setup-Windows-Server-with-python/raw/main/main.py">Source Code</a>
+<a href="https://github.com/ccccchhhheeenng/Windows-Server-Tool/blob/main/Releases/1.0.py">Source Code</a>
 
 
 
