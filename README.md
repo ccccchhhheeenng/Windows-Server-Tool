@@ -8,7 +8,7 @@
 > [!WARNING]  
 > This app can only run on Windows Server.
 
-# Setup-Windows-Server-with-python
+# Windows Server Tool
 
 
 - [Download latest](https://github.com/ccccchhhheeenng/Windows-Server-Tool/raw/refs/heads/main/Application.exe)
