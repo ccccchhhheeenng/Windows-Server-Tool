@@ -12,7 +12,7 @@
 
 
 
-- [Download latest](https://github.com/ccccchhhheeenng/Python-GUI--Setup-Windows-Server-with-python/raw/main/Application.exe)
+- [Download latest](https://github.com/ccccchhhheeenng/Windows-Server-Tool/blob/main/Application.exe)
 
 
 ## Releases
