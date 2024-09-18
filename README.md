@@ -12,7 +12,7 @@
 
 
 
-- [Download latest](https://github.com/ccccchhhheeenng/Windows-Server-Tool/blob/main/Application.exe)
+- [Download latest](https://raw.githubusercontent.com/ccccchhhheeenng/Windows-Server-Tool/refs/heads/main/Application.exe)
 
 
 ## Releases
