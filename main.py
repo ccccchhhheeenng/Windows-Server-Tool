@@ -28,15 +28,12 @@ from tkinter import ttk
 
 root = tk.Tk()
 root.title('Windows Server Tool')
-root.geometry('400x400')
+root.geometry('400x435')
 current_interface = list()
 #Style
-style = ttk.Style()
-style.configure('Custom.TButton', font=('Helvetica', 12), foreground='blue', padding=5)
-style.configure('Red.TButton', font=('Helvetica', 12), foreground='red', padding=5)
-style.configure('Green.TButton', font=('Helvetica', 12), foreground='green', padding=5)
 
-lock_interface=False
+
+
 
 #powershell
 
@@ -48,7 +45,17 @@ def powershell(command):
     lock_interface=False
 
 #-----<Interface>-----
+def update_style():
+    global style
+    style = ttk.Style()
+    root.update()
+    buttonwidth=int((root.winfo_width())/20)
+    style.configure('Custom.TButton', font=('Helvetica', 12), foreground='blue', padding=5,width=buttonwidth)
+    style.configure('Red.TButton', font=('Helvetica', 12), foreground='red', padding=5,width=buttonwidth)
+    style.configure('Green.TButton', font=('Helvetica', 12), foreground='green', padding=5,width=buttonwidth)
+lock_interface=False
 def update_interface():
+    update_style()
     if lock_interface==True:
         current_interface.pop()
     else:
@@ -196,6 +203,7 @@ def setup_main_interface():
             DNS_install_thread = threading.Thread(target=installing_DNS)
             DNS_install_thread.start()
             DNS_Install.config(text='Installing')
+            ButtonLock.config(text="Button Lock=True")
 
     def installing_DNS():
         powershell("Install-WindowsFeature -Name 'DNS' –IncludeManagementTools")
@@ -273,6 +281,9 @@ def setup_main_interface():
 #-------</Install tools>-----
 
     #-----<Main Window Buttons>-----
+    update_style()
+    statusbar2 = tk.Label(root, text='Main Window', bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
+    statusbar2.pack(side=tk.TOP, fill=tk.X)
     DHCP_Install = ttk.Button(root, text='Install DHCP Feature', command=DHCP_Install_Click, style='Custom.TButton')
     DHCP_Install.pack()
     DHCP_Uninstall = ttk.Button(root, text='Uninstall DHCP Feature', command=DHCP_Uninstall_Click, style='Custom.TButton')
@@ -295,6 +306,10 @@ def setup_main_interface():
     Setup_iSCSI_Disk_Share.pack()
     Restart_Computer=ttk.Button(root,text="Restart This Computer",command=Restart, style='Red.TButton')
     Restart_Computer.pack()
+    ButtonLock = tk.Label(root, text='0 problem found', bd=1, relief=tk.SUNKEN, anchor=tk.W)
+    ButtonLock.pack(side=tk.LEFT,anchor='s', fill="both",expand=True)
+    ButtonLock2 = tk.Label(root, text='Button Lock=False', bd=1, relief=tk.SUNKEN, anchor=tk.E)
+    ButtonLock2.pack(side=tk.RIGHT,anchor='s', fill="both",expand=True)
     #-----</Main Window Buttons>-----
 #-----</Main Interface>-----
 
@@ -773,6 +788,9 @@ def Setup_iSCSI_Disk_Share_interface():
         Back.pack() 
 
 setup_main_interface()
+
+
+
 root.mainloop()
 
 #                               .__    .__    .__    .__                   
