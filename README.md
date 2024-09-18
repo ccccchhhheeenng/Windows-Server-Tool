@@ -11,7 +11,7 @@
 # Setup-Windows-Server-with-python
 
 
--[Download latest](https://github.com/ccccchhhheeenng/Windows-Server-Tool/raw/refs/heads/main/Application.exe)
+- [Download latest](https://github.com/ccccchhhheeenng/Windows-Server-Tool/raw/refs/heads/main/Application.exe)
 
 
 ## Releases
