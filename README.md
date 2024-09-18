@@ -12,23 +12,23 @@
 
 
 
-- [Download latest](https://raw.githubusercontent.com/ccccchhhheeenng/Windows-Server-Tool/refs/heads/main/Application.exe)
+- [Download latest](https://raw.githubusercontent.com/ccccchhhheeenng/Windows-Server-Tool/raw/refs/heads//main/Application.exe)
 
 
 ## Releases
 ### v 1.1
 release at 2024/04/05
 
-<a href="https://github.com/ccccchhhheeenng/Windows-Server-Tool/blob/main/Releases/1.1.exe">Windows Executeable Download</a>
+<a href="https://github.com/ccccchhhheeenng/Windows-Server-Tool/raw/refs/heads/main/Releases/1.1.exe">Windows Executeable Download</a>
 
 <a href="https://github.com/ccccchhhheeenng/Windows-Server-Tool/blob/main/Releases/1.1.py">Source Code</a>
 
 ### v 1.0
 release at 2024/04/05
 
-<a href="https://github.com/ccccchhhheeenng/Windows-Server-Tool/blob/main/Releases/1.0.exe">Windows Executeable Download</a>
+<a href="https://github.com/ccccchhhheeenng/Windows-Server-Tool/raw/refs/heads/main/Releases/1.0.exe">Windows Executeable Download</a>
 
-<a href="https://github.com/ccccchhhheeenng/Windows-Server-Tool/blob/main/Releases/1.0.py">Source Code</a>
+<a href="https://github.com/ccccchhhheeenng/Windows-Server-Tool/raw/refs/heads/main/Releases/1.0.py">Source Code</a>
 
 
 
