@@ -306,9 +306,9 @@ def setup_main_interface():
     Setup_iSCSI_Disk_Share.pack()
     Restart_Computer=ttk.Button(root,text="Restart This Computer",command=Restart, style='Red.TButton')
     Restart_Computer.pack()
-    ButtonLock = tk.Label(root, text='0 problem found', bd=1, relief=tk.SUNKEN, anchor=tk.W)
-    ButtonLock.pack(side=tk.LEFT,anchor='s', fill="both",expand=True)
-    ButtonLock2 = tk.Label(root, text='Button Lock=False', bd=1, relief=tk.SUNKEN, anchor=tk.E)
+    # ButtonLock = tk.Label(root, text='0 problem found', bd=1, relief=tk.SUNKEN, anchor=tk.W)
+    # ButtonLock.pack(side=tk.LEFT,anchor='s', fill="both",expand=True)
+    ButtonLock2 = tk.Label(root, text='Button Lock=False', bd=1, relief=tk.SUNKEN, anchor=tk.N)
     ButtonLock2.pack(side=tk.RIGHT,anchor='s', fill="both",expand=True)
     #-----</Main Window Buttons>-----
 #-----</Main Interface>-----
@@ -368,7 +368,7 @@ def setup_DHCP_interface():
     Routerentry = tk.Entry(root)
     Routerentry.grid(row=5, column=1)
     Back = ttk.Button(root, text="Back", command=back, style='Red.TButton')
-    Back.grid(row=6, column=0, padx=20)
+    Back.grid(row=6, column=0)
     read_input=ttk.Button(root, text="Finish", command=DHCP_Finish_Button, style='Green.TButton')
     read_input.grid(row=6,column=1)
 #-----</DHCP Interface>-----
