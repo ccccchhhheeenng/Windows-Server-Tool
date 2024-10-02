@@ -40,9 +40,11 @@ current_interface = list()
 def powershell(command):
     global lock_interface
     lock_interface=True
+    ButtonLock.config(text="Button Lock=True")
     print(command)
     subprocess.run(["powershell.exe", command])
     lock_interface=False
+    ButtonLock.config(text="Button Lock=False")
 
 #-----<Interface>-----
 def update_style():
@@ -308,8 +310,9 @@ def setup_main_interface():
     Restart_Computer.pack()
     # ButtonLock = tk.Label(root, text='0 problem found', bd=1, relief=tk.SUNKEN, anchor=tk.W)
     # ButtonLock.pack(side=tk.LEFT,anchor='s', fill="both",expand=True)
-    ButtonLock2 = tk.Label(root, text='Button Lock=False', bd=1, relief=tk.SUNKEN, anchor=tk.N)
-    ButtonLock2.pack(side=tk.RIGHT,anchor='s', fill="both",expand=True)
+    global ButtonLock
+    ButtonLock = tk.Label(root, text='Button Lock=False', bd=1, relief=tk.SUNKEN, anchor=tk.N)
+    ButtonLock.pack(side=tk.RIGHT,anchor='s', fill="both",expand=True)
     #-----</Main Window Buttons>-----
 #-----</Main Interface>-----
 
