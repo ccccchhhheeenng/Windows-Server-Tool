@@ -57,6 +57,11 @@ def update_style():
     style.configure('Green.TButton', font=('Helvetica', 12), foreground='green', padding=5,width=buttonwidth)
 lock_interface=False
 def update_interface():
+    global windowstatusconfig
+    windowstatusconfig="Main Window\\"
+    for i in current_interface:
+        windowstatusconfig+=i
+        windowstatusconfig+="\\"
     update_style()
     if lock_interface==True:
         current_interface.pop()
@@ -284,8 +289,8 @@ def setup_main_interface():
 
     #-----<Main Window Buttons>-----
     update_style()
-    statusbar2 = tk.Label(root, text='Main Window', bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
-    statusbar2.pack(side=tk.TOP, fill=tk.X)
+    Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
+    Windowstatus.pack(side=tk.TOP, fill=tk.X)
     DHCP_Install = ttk.Button(root, text='Install DHCP Feature', command=DHCP_Install_Click, style='Custom.TButton')
     DHCP_Install.pack()
     DHCP_Uninstall = ttk.Button(root, text='Uninstall DHCP Feature', command=DHCP_Uninstall_Click, style='Custom.TButton')
@@ -393,7 +398,7 @@ def Remove_DHCP_Scope_interface():
     ScopeIDentry = tk.Entry(root)
     ScopeIDentry.grid(row=0, column=1)
     Back=ttk.Button(root, text="Back", command=back, style='Red.TButton')
-    Back.grid(row=6,column=0,padx=20)
+    Back.grid(row=6,column=0)
     read_input=ttk.Button(root, text="Finish", command=DHCP_Finish_Button, style='Green.TButton')
     read_input.grid(row=6,column=1) 
 def setup_DNS_interface():
@@ -414,7 +419,7 @@ def setup_DNS_interface():
             ZoneNameEntry=tk.Entry(root)
             ZoneNameEntry.grid(row=0,column=1)
             Back=ttk.Button(root,text="Back",command=back, style='Red.TButton')
-            Back.grid(row=1,column=0,padx=20)
+            Back.grid(row=1,column=0)
             Add_Primart_Zone_input=ttk.Button(root,text="Finish",command=Add_Primary_Zone_Click, style='Green.TButton')
             Add_Primart_Zone_input.grid(row=1,column=1)
         elif "Add_DNS_Primary_Record" in current_interface:
@@ -443,7 +448,7 @@ def setup_DNS_interface():
                     IPv4Address_Entry=tk.Entry(root)
                     IPv4Address_Entry.grid(row=1,column=1)
                     Back=ttk.Button(root,text="Back",command=update_interface, style='Red.TButton')
-                    Back.grid(row=2,column=0,padx=20)
+                    Back.grid(row=2,column=0)
                     A_input=ttk.Button(root,text="Finish",command=A_input_Click, style='Green.TButton')
                     A_input.grid(row=2,column=1)
                 elif tmp=="AAAA":
@@ -466,7 +471,7 @@ def setup_DNS_interface():
                     IPv6Address_Entry=tk.Entry(root)
                     IPv6Address_Entry.grid(row=1,column=1)
                     Back=ttk.Button(root,text="Back",command=update_interface, style='Red.TButton')
-                    Back.grid(row=2,column=0,padx=20)
+                    Back.grid(row=2,column=0)
                     AAAA_input=ttk.Button(root,text="Finish",command=AAAA_input_Click, style='Green.TButton')
                     AAAA_input.grid(row=2,column=1)
                 else:
@@ -489,7 +494,7 @@ def setup_DNS_interface():
                     HostNameAlias_Entry=tk.Entry(root)
                     HostNameAlias_Entry.grid(row=1,column=1)
                     Back=ttk.Button(root,text="Back",command=update_interface, style='Red.TButton')
-                    Back.grid(row=2,column=0,padx=20)
+                    Back.grid(row=2,column=0)
                     CName_input=ttk.Button(root,text="Finish",command=CName_input_Click, style='Green.TButton')
                     CName_input.grid(row=2,column=1)
             Set_Zone_Label=tk.Label(root,text="Set Zone:")
@@ -502,7 +507,7 @@ def setup_DNS_interface():
             Set_Record_Type=ttk.Combobox(root,values=["A","AAAA","CName"])
             Set_Record_Type.grid(row=1, column=1)
             Back=ttk.Button(root,text="Back",command=back, style='Red.TButton')
-            Back.grid(row=2,column=0,padx=20)
+            Back.grid(row=2,column=0)
             DNS_Record_input=ttk.Button(root,text="Next",command=DNS_Record_input_Click, style='Green.TButton')
             DNS_Record_input.grid(row=2,column=1)
         elif "Remove_DNS_Primary_Zone" in current_interface:
@@ -520,7 +525,7 @@ def setup_DNS_interface():
             ZoneNameentry = tk.Entry(root)
             ZoneNameentry.grid(row=0, column=1)
             Back=ttk.Button(root, text="Back", command=back, style='Red.TButton')
-            Back.grid(row=6,column=0,padx=20)
+            Back.grid(row=6,column=0)
             read_input=ttk.Button(root, text="Finish", command=DNS_Finish_Button, style='Green.TButton')
             read_input.grid(row=6,column=1)  
         elif "Remove_DNS_Primary_Record" in current_interface:
@@ -548,10 +553,12 @@ def setup_DNS_interface():
             Set_Record_Type=ttk.Combobox(root,values=["A","AAAA","CName"])
             Set_Record_Type.grid(row=2,column=1)
             Back=ttk.Button(root, text="Back", command=back, style='Red.TButton')
-            Back.grid(row=6,column=0,padx=20)
+            Back.grid(row=6,column=0)
             read_input=ttk.Button(root, text="Finish", command=DNS_Finish_Button, style='Green.TButton')
             read_input.grid(row=6,column=1)    
         else:
+            Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
+            Windowstatus.pack(side=tk.TOP, fill=tk.X)
             Add_Primary_Zone_Button=ttk.Button(root,text="Add Primary Zone",command=Add_DNS_Primary_Zone_Click, style='Custom.TButton')
             Add_Primary_Zone_Button.pack()           
             Add_DNS_Record_Button=ttk.Button(root,text="Add DNS Record",command=Add_DNS_Primary_Record_Click, style='Custom.TButton')
@@ -585,7 +592,7 @@ def setup_DNS_interface():
             NetworkID_Entry=tk.Entry(root)
             NetworkID_Entry.grid(row=0,column=1)
             Exit=ttk.Button(root,text="Exit",command=back, style='Red.TButton')
-            Exit.grid(row=1,column=0,padx=20)
+            Exit.grid(row=1,column=0)
             Add_Reverse_Zone_input=ttk.Button(root,text="Finish",command=Add_Reverse_Zone_input_Click, style='Green.TButton')
             Add_Reverse_Zone_input.grid(row=1,column=1)
         elif "Remove_DNS_Reverse_Zone" in current_interface:
@@ -609,7 +616,7 @@ def setup_DNS_interface():
             NetworkID_Entry=tk.Entry(root)
             NetworkID_Entry.grid(row=0,column=1)
             Exit=ttk.Button(root,text="Exit",command=back, style='Red.TButton')
-            Exit.grid(row=1,column=0,padx=20)
+            Exit.grid(row=1,column=0)
             Add_Reverse_Zone_input=ttk.Button(root,text="Finish",command=Remove_Reverse_Zone_input_Click, style='Green.TButton')
             Add_Reverse_Zone_input.grid(row=1,column=1)
         elif "Add_DNS_PTR_Record" in current_interface:
@@ -643,7 +650,7 @@ def setup_DNS_interface():
             PTRDomainName_Entry=tk.Entry(root)
             PTRDomainName_Entry.grid(row=2,column=1)
             Exit=ttk.Button(root,text="Exit",command=back, style='Red.TButton')
-            Exit.grid(row=3,column=0,padx=20)
+            Exit.grid(row=3,column=0)
             Add_PTR_Record_input=ttk.Button(root,text="Finish",command=Add_PTR_Record_input_Click, style='Green.TButton')
             Add_PTR_Record_input.grid(row=3,column=1)
         elif "Remove_DNS_PTR_Record" in current_interface:
@@ -672,10 +679,12 @@ def setup_DNS_interface():
             ZoneName_Entry=tk.Entry(root)
             ZoneName_Entry.grid(row=1,column=1)
             Exit=ttk.Button(root,text="Exit",command=back, style='Red.TButton')
-            Exit.grid(row=2,column=0,padx=20)
+            Exit.grid(row=2,column=0)
             Remove_PTR_Record_input=ttk.Button(root,text="Finish",command=Remove_PTR_Record_input_Click, style='Green.TButton')
             Remove_PTR_Record_input.grid(row=2,column=1)
         else:
+            Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
+            Windowstatus.pack(side=tk.TOP, fill=tk.X)
             Add_Zone_Button=ttk.Button(root,text="Add Zone",command=Add_DNS_Reverse_Zone_Click, style='Custom.TButton')
             Add_Zone_Button.pack()
             Remove_Zone_Button=ttk.Button(root,text="Remove Zone",command=Remove_DNS_Reverse_Zone_Click, style='Custom.TButton')
@@ -701,10 +710,12 @@ def setup_DNS_interface():
         AddressEntry=tk.Entry(root)
         AddressEntry.grid(row=0,column=1)
         Back=ttk.Button(root,text="Back",command=back, style='Red.TButton')
-        Back.grid(row=1,column=0,padx=20)
+        Back.grid(row=1,column=0)
         Fowarder_input=ttk.Button(root,text="Finish",command=input_click, style='Green.TButton')
         Fowarder_input.grid(row=1,column=1)
     else:
+        Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
+        Windowstatus.pack(side=tk.TOP, fill=tk.X)
         Foward_Lookup_Zone=ttk.Button(root,text="Foward Look Zone Settings",command=Foward_Lookup_Zone_Click, style='Custom.TButton')
         Foward_Lookup_Zone.pack()
         Reverse_Lookup_Zone=ttk.Button(root,text="Reverse Look Zone Settings",command=Reverse_Lookup_Zone_Click, style='Custom.TButton')
@@ -742,7 +753,7 @@ def Setup_iSCSI_Disk_Share_interface():
         VDisk_SizeEntry=tk.Entry(root)
         VDisk_SizeEntry.grid(row=2,column=1)
         Exit=ttk.Button(root,text="Exit",command=back, style='Red.TButton')
-        Exit.grid(row=3,column=0,padx=20)
+        Exit.grid(row=3,column=0)
         Add_VDisk_input=ttk.Button(root,text="Finish",command=Add_VDisk_input_Click, style='Green.TButton')
         Add_VDisk_input.grid(row=3,column=1)
     elif "Share_VirtualDisk" in current_interface:
@@ -779,10 +790,12 @@ def Setup_iSCSI_Disk_Share_interface():
         PasswordEntry=tk.Entry(root)
         PasswordEntry.grid(row=3,column=1)
         Exit=ttk.Button(root,text="Exit",command=back, style='Red.TButton')
-        Exit.grid(row=4,column=0,padx=20)
+        Exit.grid(row=4,column=0)
         Share_VDisk_input=ttk.Button(root,text="Finish",command=Share_VDisk_input_Click, style='Green.TButton')
         Share_VDisk_input.grid(row=4,column=1)
     else:
+        Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
+        Windowstatus.pack(side=tk.TOP, fill=tk.X)
         Add_VirtualDisk_Button=ttk.Button(root,text="Add VirtualDisk",command=Add_VirtualDisk_Click, style='Custom.TButton')
         Add_VirtualDisk_Button.pack()
         Share_VirtualDisk=ttk.Button(root,text="Share VirtualDisk by iSCSI",command=Share_VirtualDisk_Click, style='Custom.TButton')
@@ -790,11 +803,11 @@ def Setup_iSCSI_Disk_Share_interface():
         Back=ttk.Button(root,text="Back",command=back, style='Red.TButton')
         Back.pack() 
 
-setup_main_interface()
+# setup_main_interface()
 
-
-
-root.mainloop()
+if __name__ == '__main__':
+    update_interface()
+    root.mainloop()
 
 #                               .__    .__    .__    .__                   
 #  ____  ____  ____  ____  ____ |  |__ |  |__ |  |__ |  |__   ____   ____    ____   ____   ____    ____  
