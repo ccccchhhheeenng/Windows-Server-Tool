@@ -29,6 +29,7 @@ from tkinter import ttk
 root = tk.Tk()
 root.title('Windows Server Tool')
 root.geometry('400x435')
+root.iconbitmap("Windows-Server-Tool\icon.ico")
 current_interface = list()
 #Style
 
