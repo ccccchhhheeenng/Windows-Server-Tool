@@ -15,6 +15,13 @@
 
 
 ## Releases
+### v 1.2.1
+release at 2024/12/15
+
+<a href="https://github.com/ccccchhhheeenng/Windows-Server-Tool/raw/refs/heads/main/Releases/1.2.1.exe">Windows Executeable Download</a>
+
+<a href="https://github.com/ccccchhhheeenng/Windows-Server-Tool/blob/main/Releases/1.2.1.py">Source Code</a>
+
 ### v 1.2
 release at 2024/11/13
 
