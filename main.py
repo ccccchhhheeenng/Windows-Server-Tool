@@ -31,21 +31,54 @@ root.title('Windows Server Tool')
 root.geometry('400x435')
 # root.iconbitmap("Windows-Server-Tool\icon.ico")
 current_interface = list()
+
 #Style
 
 
-
-
+def result_window(run_condition,result_text):
+    result_window = tk.Toplevel(root)
+    result_window.title("result")
+    result_window.geometry("1200x200")
+    def result_window_Exit():
+        result_window.destroy()
+        result_window.update()
+        back()
+    output=""
+    fontcolor=""
+    if run_condition==0:
+        output+="Error:\n"
+        fontcolor="red"
+    else:
+        output+="Run success:\n"
+        fontcolor="white"
+    output+=result_text
+    print(output)
+    Windowstatus = tk.Label(result_window, text=output, bd=1, anchor=tk.CENTER,justify="left",fg=fontcolor)
+    Windowstatus.pack(side=tk.TOP, fill=tk.X)
+    Exit=ttk.Button(result_window, text="Exit", command=result_window_Exit,style='Red.TButton')
+    Exit.pack()
 #powershell
 
 def powershell(command):
     global lock_interface
     lock_interface=True
-    ButtonLock.config(text="Button Lock=True")
+    # ButtonLock.config(text="Button Lock=True")
     print(command)
-    subprocess.run(["powershell.exe", command])
+    result=subprocess.run(["powershell.exe", command],capture_output=True, text=True)
     lock_interface=False
-    ButtonLock.config(text="Button Lock=False")
+    # ButtonLock.config(text="Button Lock=False")
+    output = result.stdout
+    error = result.stderr
+    run_conditon=0
+    terminal_output=""
+    if output=='':
+        terminal_output=error
+        run_conditon=0
+    else:
+        terminal_output=output
+        run_conditon=1
+    result_window(run_conditon,terminal_output)
+
 
 #-----<Interface>-----
 def update_style():
@@ -172,6 +205,7 @@ def setup_main_interface():
         DHCP_complete_thread = threading.Thread(target=Func_DHCP_complete)
         DHCP_complete_thread.start()
         DHCP_Install.config(text="Finished") 
+
 
     def Func_DHCP_complete():
         
@@ -314,10 +348,11 @@ def setup_main_interface():
     Setup_iSCSI_Disk_Share.pack()
     Restart_Computer=ttk.Button(root,text="Restart This Computer",command=Restart, style='Red.TButton')
     Restart_Computer.pack()
-    # ButtonLock = tk.Label(root, text='0 problem found', bd=1, relief=tk.SUNKEN, anchor=tk.W)
-    # ButtonLock.pack(side=tk.LEFT,anchor='s', fill="both",expand=True)
+    global appcondition
+    appcondition = tk.Label(root, text='0 problem found', bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
+    appcondition.pack(side=tk.LEFT,anchor='s', fill="both",expand=True)
     global ButtonLock
-    ButtonLock = tk.Label(root, text='Button Lock=False', bd=1, relief=tk.SUNKEN, anchor=tk.N)
+    ButtonLock = tk.Label(root, text='Button Lock=False', bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
     ButtonLock.pack(side=tk.RIGHT,anchor='s', fill="both",expand=True)
     #-----</Main Window Buttons>-----
 #-----</Main Interface>-----
@@ -351,7 +386,16 @@ def setup_DHCP_interface():
         powershell(SetDHCPDNS)
         SetDHCPRouter="Set-DhcpServerv4OptionValue -ScopeId "+ScopeID+" -Router "+Router
         powershell(SetDHCPRouter)
-        back()      
+        back()
+    root.grid_rowconfigure(0, weight=0)
+    root.grid_rowconfigure(1, weight=0)
+    root.grid_rowconfigure(2, weight=0)
+    root.grid_rowconfigure(3, weight=0)
+    root.grid_rowconfigure(4, weight=0) 
+    root.grid_rowconfigure(5, weight=0)
+    root.grid_rowconfigure(6, weight=0)
+    root.grid_rowconfigure(7, weight=0)
+    root.grid_rowconfigure(8, weight=1)
     Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
     Windowstatus.grid(row=0,column=0,columnspan=2,sticky="ew")
     StartRangelabel = tk.Label(root, text='StartRange:')
@@ -382,6 +426,10 @@ def setup_DHCP_interface():
     Back.grid(row=7, column=0)
     read_input=ttk.Button(root, text="Finish", command=DHCP_Finish_Button, style='Green.TButton')
     read_input.grid(row=7,column=1)
+    appcondition = tk.Label(root, text='0 problem found', bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
+    appcondition.grid(row=8, column=0, sticky="ews")
+    ButtonLock = tk.Label(root, text='Button Lock=False', bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
+    ButtonLock.grid(row=8, column=1,sticky="ews",)
 #-----</DHCP Interface>-----
 
 
@@ -394,7 +442,6 @@ def Remove_DHCP_Scope_interface():
         ScopeID=ScopeIDentry.get()
         command="Remove-DhcpServerv4Scope -ScopeId "+ScopeID
         powershell(command)
-        back()
     Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
     Windowstatus.grid(row=0,column=0,columnspan=2,sticky="ew")
     ScopeIDlabel = tk.Label(root, text='ScopeID:')
