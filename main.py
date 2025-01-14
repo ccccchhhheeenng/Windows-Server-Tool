@@ -31,53 +31,49 @@ root.title('Windows Server Tool')
 root.geometry('400x435')
 # root.iconbitmap("Windows-Server-Tool\icon.ico")
 current_interface = list()
-
+global powershell_return,output,error
+powershell_return=""
+output=[]
+error=[]
 #Style
 
 
-def result_window(run_condition,result_text):
+def result_window():
     result_window = tk.Toplevel(root)
     result_window.title("result")
     result_window.geometry("1200x200")
     def result_window_Exit():
         result_window.destroy()
         result_window.update()
+        output.clear()
+        error.clear()
         back()
-    output=""
-    fontcolor=""
-    if run_condition==0:
-        output+="Error:\n"
-        fontcolor="red"
-    else:
-        output+="Run success:\n"
-        fontcolor="white"
-    output+=result_text
-    print(output)
-    Windowstatus = tk.Label(result_window, text=output, bd=1, anchor=tk.CENTER,justify="left",fg=fontcolor)
+
+    terminal_output="Output:\n"
+    for i in output:
+        terminal_output+=i
+    terminal_Error="Error\n"
+    for i in error:
+        terminal_Error+=i
+    Windowstatus = tk.Label(result_window, text=terminal_output, bd=1, anchor=tk.CENTER,justify="left",fg="black")
     Windowstatus.pack(side=tk.TOP, fill=tk.X)
+    Windowstatus2= tk.Label(result_window, text=terminal_Error, bd=1, anchor=tk.CENTER,justify="left",fg="red")
+    Windowstatus2.pack(side=tk.TOP, fill=tk.X)
     Exit=ttk.Button(result_window, text="Exit", command=result_window_Exit,style='Red.TButton')
     Exit.pack()
 #powershell
 
-def powershell(command):
+def powershell(command,finish):
     global lock_interface
     lock_interface=True
     # ButtonLock.config(text="Button Lock=True")
-    print(command)
     result=subprocess.run(["powershell.exe", command],capture_output=True, text=True)
     lock_interface=False
     # ButtonLock.config(text="Button Lock=False")
-    output = result.stdout
-    error = result.stderr
-    run_conditon=0
-    terminal_output=""
-    if output=='':
-        terminal_output=error
-        run_conditon=0
-    else:
-        terminal_output=output
-        run_conditon=1
-    result_window(run_conditon,terminal_output)
+    output.append(result.stdout)
+    error.append(result.stderr)
+    if finish:
+        result_window()
 
 
 #-----<Interface>-----
@@ -113,7 +109,7 @@ def update_interface():
         if "iSCSI" in current_interface:
             Setup_iSCSI_Disk_Share_interface()
 def back():
-    if lock_interface==True:
+    if len(current_interface)==0:
         pass
     else:
         current_interface.pop()
@@ -201,7 +197,7 @@ def setup_main_interface():
             DHCP_Install.config(text='Installing')
 
     def installing_DHCP():
-        powershell("Install-WindowsFeature -Name 'DHCP' –IncludeManagementTools")
+        powershell(command="Install-WindowsFeature -Name 'DHCP' –IncludeManagementTools",finish=True)
         DHCP_complete_thread = threading.Thread(target=Func_DHCP_complete)
         DHCP_complete_thread.start()
         DHCP_Install.config(text="Finished") 
@@ -226,7 +222,7 @@ def setup_main_interface():
             DHCP_Uninstall.config(text='Uninstalling')
 
     def Uninstalling_DHCP():
-        powershell("Uninstall-WindowsFeature -Name 'DHCP' –IncludeManagementTools")
+        powershell(command="Uninstall-WindowsFeature -Name 'DHCP' –IncludeManagementTools",finish=True)
         DHCP_complete_thread = threading.Thread(target=Func_UnDHCP_complete)
         DHCP_complete_thread.start()
 
@@ -248,7 +244,7 @@ def setup_main_interface():
             ButtonLock.config(text="Button Lock=True")
 
     def installing_DNS():
-        powershell("Install-WindowsFeature -Name 'DNS' –IncludeManagementTools")
+        powershell(command="Install-WindowsFeature -Name 'DNS' –IncludeManagementTools",finish=True)
         DNS_complete_thread = threading.Thread(target=Func_DNS_complete)
         DNS_complete_thread.start()
 
@@ -381,12 +377,11 @@ def setup_DHCP_interface():
         ScopeID+="0"
         #</Scope id calculate>
         AddScope="Add-DhcpServerV4Scope -Name "+ScopeName+" -StartRange "+StartRange+" -EndRange "+EndRange+" -Subnetmask "+SubnetMask
-        powershell(AddScope)
+        powershell(command=AddScope,finish=False)
         SetDHCPDNS="Set-DhcpServerv4OptionValue -ScopeId "+ScopeID+" -OptionId 6 -Value "+DNS_Address
-        powershell(SetDHCPDNS)
+        powershell(command=SetDHCPDNS,finish=False)
         SetDHCPRouter="Set-DhcpServerv4OptionValue -ScopeId "+ScopeID+" -Router "+Router
-        powershell(SetDHCPRouter)
-        back()
+        powershell(command=SetDHCPRouter,finish=True)
     root.grid_rowconfigure(0, weight=0)
     root.grid_rowconfigure(1, weight=0)
     root.grid_rowconfigure(2, weight=0)
