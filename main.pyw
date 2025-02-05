@@ -47,30 +47,49 @@ def result_window():
         result_window.update()
         output.clear()
         error.clear()
-        back()
+        if len(current_interface) > 0:
+            back()
+    print(error)
     terminal_output="Output:\n"
-    for i in output:
-        terminal_output+=i
+    if len(output)==0:
+        terminal_output+="No Output"
+    else:
+        for i in output:
+            terminal_output+=i
     terminal_Error="Error\n"
-    for i in error:
-        terminal_Error+=i
-    Windowstatus = tk.Label(result_window, text=terminal_output, bd=1, anchor=tk.CENTER,justify="left",fg="black")
+    if len(error)==0:
+        terminal_Error+="No Error"
+    else:
+        for i in error:
+            terminal_Error+=i
+    Windowstatus = tk.Label(result_window, text=terminal_output, bd=1, anchor=tk.CENTER,justify="left",fg="black",wraplength=1000)
     Windowstatus.pack(side=tk.TOP, fill=tk.X)
-    Windowstatus2= tk.Label(result_window, text=terminal_Error, bd=1, anchor=tk.CENTER,justify="left",fg="red")
+    Windowstatus2= tk.Label(result_window, text=terminal_Error, bd=1, anchor=tk.CENTER,justify="left",fg="red",wraplength=1000)
     Windowstatus2.pack(side=tk.TOP, fill=tk.X)
     Exit=ttk.Button(result_window, text="Exit", command=result_window_Exit,style='Red.TButton')
     Exit.pack()
 #powershell
 
-def powershell(command=str,finish=bool):
+def powershell(command: str, finish: bool):
     global lock_interface
     lock_interface=True
-    # ButtonLock.config(text="Button Lock=True")
-    result=subprocess.run(["powershell.exe", command],capture_output=True, text=True)
+    try:
+        ButtonLock.config(text="Button Lock=True")
+    except:
+        pass
+    command+="|Out-String -Width 4096"
+    result=subprocess.run(["powershell.exe", command], capture_output=True, text=True,creationflags=subprocess.CREATE_NO_WINDOW)
     lock_interface=False
-    # ButtonLock.config(text="Button Lock=False")
-    output.append(result.stdout)
-    error.append(result.stderr)
+    try:
+        ButtonLock.config(text="Button Lock=False")
+    except:
+        pass
+    tmpoutput=(result.stdout).replace("","")
+    tmperror=(result.stderr).replace("","")
+    if result.stdout!="":
+        output.append(tmpoutput)
+    if result.stderr!="":
+        error.append(tmperror)
     if finish:
         result_window()
 
