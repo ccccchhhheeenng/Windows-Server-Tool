@@ -41,14 +41,13 @@ error=[]
 def result_window():
     result_window = tk.Toplevel(root)
     result_window.title("result")
-    result_window.geometry("1200x200")
+    result_window.geometry("1200x300")
     def result_window_Exit():
         result_window.destroy()
         result_window.update()
         output.clear()
         error.clear()
         back()
-
     terminal_output="Output:\n"
     for i in output:
         terminal_output+=i
@@ -63,7 +62,7 @@ def result_window():
     Exit.pack()
 #powershell
 
-def powershell(command,finish):
+def powershell(command=str,finish=bool):
     global lock_interface
     lock_interface=True
     # ButtonLock.config(text="Button Lock=True")
@@ -267,7 +266,7 @@ def setup_main_interface():
             DNS_Uninstall.config(text='Uninstalling')
 
     def Uninstalling_DNS():
-        powershell("Uninstall-WindowsFeature -Name 'DNS' –IncludeManagementTools")
+        powershell(command="Uninstall-WindowsFeature -Name 'DNS' –IncludeManagementTools",finish=True)
         DNS_complete_thread = threading.Thread(target=Func_UnDNS_complete)
         DNS_complete_thread.start()
 
@@ -286,7 +285,7 @@ def setup_main_interface():
             Uninstall_iSCSITarget.config(text='Uninstalling')
 
     def Uninstalling_iSCSI():
-        powershell("Uninstall-WindowsFeature -Name FS-iSCSITarget-Server")
+        powershell(command="Uninstall-WindowsFeature -Name FS-iSCSITarget-Server",finish=True)
         iSCSI_complete_thread = threading.Thread(target=Func_UniSCSI_complete)
         iSCSI_complete_thread.start()
 
@@ -305,7 +304,7 @@ def setup_main_interface():
             Install_iSCSITarget.config(text='Installing')
 
     def installing_iSCSI():
-        powershell("Install-WindowsFeature -Name FS-iSCSITarget-Server")
+        powershell(command="Install-WindowsFeature -Name FS-iSCSITarget-Server",finish=True)
         iSCSI_complete_thread = threading.Thread(target=Func_iSCSI_complete)
         iSCSI_complete_thread.start()
 
@@ -436,7 +435,7 @@ def Remove_DHCP_Scope_interface():
     def DHCP_Finish_Button_Run():
         ScopeID=ScopeIDentry.get()
         command="Remove-DhcpServerv4Scope -ScopeId "+ScopeID
-        powershell(command)
+        powershell(command=command,finish=True)
     Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
     Windowstatus.grid(row=0,column=0,columnspan=2,sticky="ew")
     ScopeIDlabel = tk.Label(root, text='ScopeID:')
@@ -458,7 +457,7 @@ def setup_DNS_interface():
                 ZoneName=ZoneNameEntry.get()
                 ZoneFile=ZoneName+".dns"
                 command="Add-DnsServerPrimaryZone -Name "+ZoneName+" -ZoneFile "+ZoneFile
-                powershell(command)
+                powershell(command=command,finish=True)
                 back()
             Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
             Windowstatus.grid(row=0,column=0,columnspan=2,sticky="ew")
@@ -485,7 +484,7 @@ def setup_DNS_interface():
                         name=Name_Entry.get()
                         IPv4Address=IPv4Address_Entry.get()
                         command="Add-DnsServerResourceRecordA -Name "+name+" -ZoneName "+zone+" -IPv4Address "+IPv4Address
-                        powershell(command)
+                        powershell(command=command,finish=True)
                         update_interface()
                     Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
                     Windowstatus.grid(row=0,column=0,columnspan=2,sticky="ew")
@@ -510,7 +509,7 @@ def setup_DNS_interface():
                         name=Name_Entry.get()
                         IPv6Address=IPv6Address_Entry.get()
                         command="Add-DnsServerResourceRecordAAAA -Name "+name+" -ZoneName "+zone+" -IPv6Address "+IPv6Address
-                        powershell(command)
+                        powershell(command=command,finish=True)
                         update_interface()
                     Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
                     Windowstatus.grid(row=0,column=0,columnspan=2,sticky="ew")
@@ -535,7 +534,7 @@ def setup_DNS_interface():
                         name=Name_Entry.get()
                         HostNameAlias=HostNameAlias_Entry.get()
                         command="Add-DnsServerResourceRecordCName -Name "+name+" -ZoneName "+zone+" -HostNameAlias "+HostNameAlias
-                        powershell(command)
+                        powershell(command=command,finish=True)
                         update_interface()
                     Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
                     Windowstatus.grid(row=0,column=0,columnspan=2,sticky="ew")
@@ -574,7 +573,7 @@ def setup_DNS_interface():
             def Remove_Start():
                 Zone=ZoneNameentry.get()
                 command="Remove-DnsServerZone -Name "+Zone+" -Force"
-                powershell(command)
+                powershell(command=command,finish=True)
                 back()  
             Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
             Windowstatus.grid(row=0,column=0,columnspan=2,sticky="ew")             
@@ -596,7 +595,7 @@ def setup_DNS_interface():
                 Record=RecordNameentry.get()
                 type=str(Set_Record_Type.get())
                 command="Remove-DnsServerResourceRecord -ZoneName "+Zone+" -Name "+Record+" -RRType "+type+" -Force"
-                powershell(command)
+                powershell(command=command,finish=True)
                 back()
             Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
             Windowstatus.grid(row=0,column=0,columnspan=2,sticky="ew")
@@ -645,7 +644,7 @@ def setup_DNS_interface():
                 NetworkID=NetworkID+"/24"
                 zonefile+="in-addr.arpa.dns"
                 command="Add-DnsServerPrimaryZone -NetworkID "+NetworkID+" -ZoneFile "+zonefile
-                powershell(command)
+                powershell(command=command,finish=True)
                 back()
             Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
             Windowstatus.grid(row=0,column=0,columnspan=2,sticky="ew")
@@ -671,7 +670,7 @@ def setup_DNS_interface():
                     ID+="."
                 ID+="in-addr.arpa"
                 command="Remove-DnsServerZone "+ID+" -Force"
-                powershell(command)
+                powershell(command=command,finish=True)
                 back()
             Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
             Windowstatus.grid(row=0,column=0,columnspan=2,sticky="ew")
@@ -699,8 +698,7 @@ def setup_DNS_interface():
                     ID+="."
                 ID+="in-addr.arpa"
                 command="Add-DnsServerResourceRecordPtr -Name "+Name+" -ZoneName "+ID+" -PtrDomainName "+PTRDomainName
-                powershell(command)
-                back()
+                powershell(command=command,finish=True)
             Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
             Windowstatus.grid(row=0,column=0,columnspan=2,sticky="ew")
             Name_Label=tk.Label(root,text="Name:")
@@ -734,8 +732,7 @@ def setup_DNS_interface():
                     ID+="."
                 ID+="in-addr.arpa"
                 command="Remove-DnsServerResourceRecord -ZoneName "+ID+" -RRType PTR -Name "+Name+" -Force"
-                powershell(command)
-                back()
+                powershell(command=command,finish=True)
             Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
             Windowstatus.grid(row=0,column=0,columnspan=2,sticky="ew")
             Name_Label=tk.Label(root,text="Name:")
@@ -771,8 +768,7 @@ def setup_DNS_interface():
         def Setting_Fowarder():
             Address=AddressEntry.get()
             command="Set-DnsServerForwarder -IPAddress "+Address
-            powershell(command)
-            back()
+            powershell(command=command,finish=True)
         Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
         Windowstatus.grid(row=0,column=0,columnspan=2,sticky="ew")
         Addresslabel=tk.Label(root,text="IPAddress")
@@ -808,7 +804,7 @@ def Setup_iSCSI_Disk_Share_interface():
             disk=path+name
             size=VDisk_SizeEntry.get()
             command="New-IscsiVirtualDisk -Path "+disk+" -size "+size
-            powershell(command)
+            powershell(command=command,finish=True)
             back()
         Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
         Windowstatus.grid(row=0,column=0,columnspan=2,sticky="ew")
@@ -839,11 +835,11 @@ def Setup_iSCSI_Disk_Share_interface():
             target=TargetnameEntry.get()
             path=DiskPathEntry.get()
             command0="New-IscsiServerTarget -TargetName "+target+" -InitiatorId \"Iqn:*\""
-            powershell(command0)
+            powershell(command=command0,finish=False)
             command1="Add-IscsiVirtualDiskTargetMapping -TargetName "+target+" -DevicePath "+path
-            powershell(command1)
+            powershell(command=command1,finish=False)
             command2="$User=\""+user+"\";$PWord = ConvertTo-SecureString -String \""+pword+"\" -AsPlainText -Force;$Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $PWord;Set-IscsiServerTarget -TargetName "+target+" -EnableChap $True -Chap $Credential"
-            powershell(command2)
+            powershell(command=command2,finish=True)
             back()
         Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
         Windowstatus.grid(row=0,column=0,columnspan=2,sticky="ew")
