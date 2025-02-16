@@ -3,7 +3,7 @@ import time
 import threading
 import subprocess
 from tkinter import ttk
-
+from tkinter import filedialog
 
 
 #                                                 @+      +@       :#.      +@                                                                         
@@ -49,7 +49,7 @@ def result_window():
         error.clear()
         if len(current_interface) > 0:
             back()
-    print(error)
+    # print(error)
     terminal_output="Output:\n"
     if len(output)==0:
         terminal_output+="No Output"
@@ -73,25 +73,23 @@ def result_window():
 def powershell(command: str, finish: bool):
     global lock_interface
     lock_interface=True
+
     try:
         ButtonLock.config(text="Button Lock=True")
     except:
         pass
-    command+="|Out-String -Width 4096"
+
     result=subprocess.run(["powershell.exe", command], capture_output=True, text=True,creationflags=subprocess.CREATE_NO_WINDOW)
     lock_interface=False
     try:
         ButtonLock.config(text="Button Lock=False")
     except:
         pass
-    tmpoutput=(result.stdout).replace("","")
-    tmperror=(result.stderr).replace("","")
-    if result.stdout!="":
-        output.append(tmpoutput)
-    if result.stderr!="":
-        error.append(tmperror)
-    if finish:
-        result_window()
+    # tmpoutput=(result.stdout).replace("","")
+    # tmperror=(result.stderr).replace("","")
+    if result.stdout!="":output.append(result.stdout)
+    if result.stderr!="":error.append(result.stderr)
+    if finish:result_window()
 
 
 #-----<Interface>-----
@@ -127,6 +125,7 @@ def update_interface():
         if "iSCSI" in current_interface:
             Setup_iSCSI_Disk_Share_interface()
 def back():
+    root.geometry('400x435')
     if len(current_interface)==0:
         pass
     else:
@@ -503,7 +502,6 @@ def setup_DNS_interface():
                         IPv4Address=IPv4Address_Entry.get()
                         command="Add-DnsServerResourceRecordA -Name "+name+" -ZoneName "+zone+" -IPv4Address "+IPv4Address
                         powershell(command=command,finish=True)
-                        update_interface()
                     Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
                     Windowstatus.grid(row=0,column=0,columnspan=2,sticky="ew")
                     Name_Label=tk.Label(root,text="Name:")
@@ -528,7 +526,6 @@ def setup_DNS_interface():
                         IPv6Address=IPv6Address_Entry.get()
                         command="Add-DnsServerResourceRecordAAAA -Name "+name+" -ZoneName "+zone+" -IPv6Address "+IPv6Address
                         powershell(command=command,finish=True)
-                        update_interface()
                     Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
                     Windowstatus.grid(row=0,column=0,columnspan=2,sticky="ew")
                     Name_Label=tk.Label(root,text="Name:")
@@ -553,7 +550,6 @@ def setup_DNS_interface():
                         HostNameAlias=HostNameAlias_Entry.get()
                         command="Add-DnsServerResourceRecordCName -Name "+name+" -ZoneName "+zone+" -HostNameAlias "+HostNameAlias
                         powershell(command=command,finish=True)
-                        update_interface()
                     Windowstatus = tk.Label(root, text=windowstatusconfig, bd=1, relief=tk.SUNKEN, anchor=tk.CENTER)
                     Windowstatus.grid(row=0,column=0,columnspan=2,sticky="ew")
                     Name_Label=tk.Label(root,text="Name:")
@@ -808,6 +804,12 @@ def setup_DNS_interface():
 def Setup_iSCSI_Disk_Share_interface():
 
     if "Add_VirtualDisk" in current_interface:
+        root.geometry("600x435")
+
+        def Select_Disk():
+            data = str(filedialog.askdirectory())
+            VDisk_PathEntry.insert(0,data)
+            VDisk_PathEntry.config(state="readonly")
         def Add_VDisk_input_Click():
             Add_VDisk_input_Start=threading.Thread(target=Add_VDisk_input_thread)
             Add_VDisk_input_Start.start()
@@ -815,6 +817,7 @@ def Setup_iSCSI_Disk_Share_interface():
         def Add_VDisk_input_thread():
             path=VDisk_PathEntry.get()
             name=VDisk_NameEntry.get()
+            path=path.replace("/","\\")
             disk=path+name
             size=VDisk_SizeEntry.get()
             command="New-IscsiVirtualDisk -Path "+disk+" -size "+size
@@ -825,6 +828,8 @@ def Setup_iSCSI_Disk_Share_interface():
         VDisk_PathLabel.grid(row=1,column=0)
         VDisk_PathEntry=tk.Entry(root)
         VDisk_PathEntry.grid(row=1,column=1)
+        VDisk_PathButton=ttk.Button(root,text="Select",command=Select_Disk, style='Green.TButton')
+        VDisk_PathButton.grid(row=1,column=2)
         VDisk_NameLabel=tk.Label(root,text="VDisk Name(Ex:DiskName.vhdx)")
         VDisk_NameLabel.grid(row=2,column=0)
         VDisk_NameEntry=tk.Entry(root)
@@ -838,6 +843,11 @@ def Setup_iSCSI_Disk_Share_interface():
         Add_VDisk_input=ttk.Button(root,text="Finish",command=Add_VDisk_input_Click, style='Green.TButton')
         Add_VDisk_input.grid(row=4,column=1)
     elif "Share_VirtualDisk" in current_interface:
+        root.geometry("600x435")
+        def Select_Disk():
+            data = str(filedialog.askopenfilename())
+            DiskPathEntry.insert(0,data)
+            DiskPathEntry.config(state="readonly")
         def Share_VDisk_input_Click():
             Share_VDisk_input_Start=threading.Thread(target=Share_VDisk_input_thread)
             Share_VDisk_input_Start.start()
@@ -847,6 +857,7 @@ def Setup_iSCSI_Disk_Share_interface():
             pword=PasswordEntry.get()
             target=TargetnameEntry.get()
             path=DiskPathEntry.get()
+            path=path.replace("/","\\")
             command0="New-IscsiServerTarget -TargetName "+target+" -InitiatorId \"Iqn:*\""
             powershell(command=command0,finish=False)
             command1="Add-IscsiVirtualDiskTargetMapping -TargetName "+target+" -DevicePath "+path
@@ -863,6 +874,8 @@ def Setup_iSCSI_Disk_Share_interface():
         DiskPathLabel.grid(row=2,column=0)
         DiskPathEntry=tk.Entry(root)
         DiskPathEntry.grid(row=2,column=1)
+        DiskPathButton=ttk.Button(root,text="Select",command=Select_Disk, style='Green.TButton')
+        DiskPathButton.grid(row=2,column=2)
         UsernameLabel=tk.Label(root,text="User Name")
         UsernameLabel.grid(row=3,column=0)
         UsernameEntry=tk.Entry(root)
